@@ -1,14 +1,32 @@
-import { createStore } from 'vuex'
+// src/store/index.js
+import { createStore } from 'vuex';
 
-export default createStore({
+const store = createStore({
   state: {
-  },
-  getters: {
+    tabPage: 'one',
+    certification_edit: [],
+
+    form: {
+      pj_name: "",
+      pj_code: "",
+      date_desc: "",
+      currentYear: "",
+      add_name: "",
+      add_position: "",
+      language: "TH",
+      sign: false,
+      two_sign: false,
+    },
   },
   mutations: {
+    // มิวเทชันของคุณ
   },
   actions: {
+    // การกระทำของคุณ
   },
-  modules: {
-  }
-})
+  getters: {
+    // ตัวกำหนดของคุณ
+  },
+});
+
+export default store;

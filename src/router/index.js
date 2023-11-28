@@ -1,25 +1,45 @@
+// Composables
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    component: () => import('../views/MainPage.vue'),
+    children: [
+
+    ],
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
+    path: '/certificate-main',
+    name: 'Certificate-Main',
+    component: () => import('../views/MainPage.vue'),
+  },
+  {
+    path: '/certificate-pdf',
+    name: 'Certificate-PDF',
+    component: () => import('../views/Certificate-PDF.vue'),
+  },
+  {
+    path: '/certificate-master',
+    name: 'Certificate-Master',
+    component: () => import('../views/Certificate-Master.vue'),
+  },
+  {
+    path: '/certificate-edit',
+    name: 'Certificate-Edit',
+    component: () => import('../views/Certificate-Edit.vue'),
+  },
+  {
+    path: '/show-pdf/:path',
+    name: 'show-pdf',
+    props: true,
+    component: () => import('../views/Show-PDF.vue'),
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
 })
 
 export default router
