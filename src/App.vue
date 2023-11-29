@@ -14,5 +14,9 @@ export default {
   data: () => ({
     //
   }),
+
+  mounted() {
+    document.title = "Certificate"
+  }
 }
 </script>
