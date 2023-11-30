@@ -211,7 +211,7 @@ function run(excel, form) {
         absolutePosition: { x: valueX, y: 40 }
       },
 
-      (excel.length === 1) ? { qr: 'http://10.62.38.51:3300/show-pdf/path?' + `param1=${form.pj_code}` + '&' + `param2=${form.no}`, fit: 60, absolutePosition: { x: 760, y: 60 } } : { qr: 'http://10.62.38.51:3300/show-pdf/path?' + `param1=${form.pj_code}` + '&' + `param2=${e.no}`, fit: 60, absolutePosition: { x: 760, y: 60 } },
+      (excel.length === 1) ? { qr: 'https://mb.mahidol.ac.th/seapi/show-pdf/path?' + `param1=${form.pj_code}` + '&' + `param2=${form.no}`, fit: 60, absolutePosition: { x: 760, y: 60 } } : { qr: 'https://mb.mahidol.ac.th/seapi/show-pdf/path?' + `param1=${form.pj_code}` + '&' + `param2=${e.no}`, fit: 60, absolutePosition: { x: 760, y: 60 } },
 
       (form.language === "Eng") ? { text: 'Institute of  Molecular Biosciences', color: '#1565C0', fontSize: 24, absolutePosition: { x: 50, y: 120 } } : {},
       (form.language === "Eng") ? { text: 'Mahidol University ', color: '#1565C0', fontSize: 24, absolutePosition: { x: 50, y: 150 } } : {},

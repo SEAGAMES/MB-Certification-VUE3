@@ -22,7 +22,6 @@ const updateCertificate = async(data, listName) => {
 
 const getDataCertificate_master = async() => {
     let data = await axios.get(`${apiUrl}data_certificate`).then(res=>{
-        //console.log(res)
         return res
     })
     .catch(err=>console.error(err))
