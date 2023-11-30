@@ -11,7 +11,7 @@
           <td>{{ item.pj_code }}</td>
           <td>{{ item.pj_name }}</td>
           <!-- <td>{{ item.language }}</td> -->
-          <v-chip :color="getColor(item.language) ">
+          <v-chip :color="getColor(item.language)">
             {{ item.language }}
           </v-chip>
           <td>{{ item.currentYear }}</td>
@@ -34,13 +34,13 @@
       </template></v-data-table
     >
   </v-container>
-
 </template>
 
 <script>
 //import { ref } from "vue";
 import Swal from "sweetalert2";
 import apiCertificate from "@/service/apiCertificate";
+
 export default {
   data() {
     return {
@@ -135,5 +135,4 @@ export default {
 </script>
 
 <style>
-
 </style>

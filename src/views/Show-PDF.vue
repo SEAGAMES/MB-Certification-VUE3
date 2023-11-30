@@ -19,6 +19,7 @@ export default {
     };
   },
   async mounted() {
+    console.log('มา')
     // สร้าง URL object
     const url = new URL(window.location.href);
 
