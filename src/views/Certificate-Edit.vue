@@ -1,6 +1,5 @@
 <template class="fontSarabun">
-  <v-parallax src="../assets/background/mb-building2.jpg"
-    >
+  <v-parallax src="../assets/background/mb-building2.jpg">
     <v-row justify="center" class="fontSarabun">
       <v-col cols="12" sm="10" md="8" lg="6">
         <v-form ref="form" lazy-validation>
@@ -47,10 +46,7 @@
                     id="pj_name"
                     v-model="dataStorage.pj_code"
                     :rules="textRule"
-                    @input="
-                      $store.state.certificate_data.pj_code =
-                        $event.target.value.toUpperCase()
-                    "
+                    @input="handleInput"
                   ></v-text-field
                 ></v-col>
                 <v-col
@@ -221,9 +217,9 @@ export default {
     this.getDataCertificateDetail();
   },
   methods: {
-    handleInput(event) {
+    handleInput() {
       // แปลงเป็นตัวพิมพ์ใหญ่
-      this.dataStorage.pj_code = event.target.value.toUpperCase();
+      //this.dataStorage.pj_code = event.target.value.toUpperCase();
 
       // กรองเฉพาะภาษาอังกฤษและเครื่องหมาย "-"
       this.dataStorage.pj_code = this.dataStorage.pj_code.replace(
