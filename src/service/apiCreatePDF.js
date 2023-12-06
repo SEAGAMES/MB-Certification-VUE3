@@ -174,8 +174,10 @@ function run(excel, form) {
   let valueX = 0
   let valueMargin = 15
 
-  let url = 'http://10.62.38.51:3300/'
-  //let url = 'https://mb.mahidol.ac.th/'
+  console.log(form.pj_code, form.no)
+
+  //let url = 'http://10.62.38.51:3300/'
+  let url = 'https://mb.mahidol.ac.th/mb_certificate/#/'
 
   if (form.pj_code.length === 7) {
     valueX = 613
