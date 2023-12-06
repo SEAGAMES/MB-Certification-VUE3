@@ -19,9 +19,7 @@ export default {
     };
   },
   async mounted() {
-    // console.log(this.$route.query);
     // console.log(this.$route.query.param1, this.$route.query.param2)
-
     const { data } = await dataQrCode.getDataQrCode(this.$route.query.param1, this.$route.query.param2);
     if (data.msg === "not found") {
       this.showAlert("error", "Certificate Not Found !!");

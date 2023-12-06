@@ -1,5 +1,6 @@
 // Composables
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
+//createWebHashHistory
 
 import middlewarePipeline from "./middlewarePipeline";
 import store from "../store";
@@ -34,11 +35,6 @@ const routes = [
     name: "Certificate-Edit",
     component: () => import("../views/Certificate-Edit.vue"),
   },
-  // {
-  //   path: "/show-pdf",
-  //   name: "Show-PDF",
-  //   component: () => import("@/views/AboutView.vue"),
-  // },
   {
     path: "/show-pdf/:path",
     props: true,
@@ -51,7 +47,8 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(process.env.BASE_URL),
+  //createWebHashHistory
+  history: createWebHistory(process.env.BASE_URL),
   routes,
 });
 
