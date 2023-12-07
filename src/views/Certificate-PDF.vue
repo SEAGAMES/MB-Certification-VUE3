@@ -282,14 +282,21 @@ export default {
     // เช็กเมื่อกดปุ่ม save to db
     validateCheck() {
       this.$refs.form.validate();
-      if (this.form.pj_code && this.form.pj_name && this.form.date_desc) {
-        if (
-          !this.form.two_sign ||
-          (this.form.add_name && this.form.add_position)
-        ) {
-          this.showDialog = true;
+
+      this.$refs.form.validate().then((result) => {
+        // ตรวจสอบค่า valid
+        if (result.valid) {
+          // ตรวจสอบผ่าน
+          if (this.form.pj_code && this.form.pj_name && this.form.date_desc) {
+            if (
+              !this.form.two_sign ||
+              (this.form.add_name && this.form.add_position)
+            ) {
+              this.showDialog = true;
+            }
+          }
         }
-      }
+      });
     },
 
     async savePdfToDB() {
