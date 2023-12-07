@@ -15,7 +15,7 @@
                 ></v-text-field></v-col
               ><v-col
                 ><v-row
-                  ><v-col cols="4" >
+                  ><v-col cols="4">
                     <v-switch
                       v-model="form.language"
                       @change="saveCreatePDF"
@@ -49,7 +49,7 @@
                   id="pj_name"
                   v-model="form.pj_code"
                   @change="saveCreatePDF"
-                  :rules="textRule"
+                  :rules="pjCodeRule"
                   @input="handleInput"
                   required
                 ></v-text-field
@@ -162,6 +162,12 @@ export default {
   data() {
     return {
       textRule: [(v) => !!v || "กรุณาใส่ข้อความ"],
+      pjCodeRule: [
+        (v) => !!v || "กรุณาใส่รหัสโครงการ",
+        (v) =>
+          /^[A-Z0-9-]*$/.test(v) ||
+          "กรุณาใส่ตัวอักษร ตัวเลข หรือเครื่องหมายลบเท่านั้น",
+      ],
       twoSignRule: [
         (v) => (this.form.two_sign ? !!v || "กรุณาใส่ข้อความ" : true),
       ],
@@ -194,7 +200,6 @@ export default {
       showDialog: false,
       loadingBtn: false,
     };
-    
   },
   async mounted() {
     const dataFormLocal = JSON.parse(localStorage.getItem("create_pdf")) || {};
