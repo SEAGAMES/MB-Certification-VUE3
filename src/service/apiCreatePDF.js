@@ -171,32 +171,11 @@ function signOption(form) {
 
 function run(excel, form) {
   let s = []
-  let valueX = 0
   let valueMargin = 15
 
-  console.log(form.pj_code, form.no)
-
-  let url = 'http://10.62.38.51:3300/'
-  //let url = 'https://mb.mahidol.ac.th/mb_certificate/#/'
-
-  if (form.pj_code.length === 7) {
-    valueX = 613
-  }
-  else if (form.pj_code.length === 8) {
-    valueX = 608
-  }
-  else if (form.pj_code.length === 9) {
-    valueX = 603
-  }
-  else if (form.pj_code.length === 10) {
-    valueX = 599
-  }
-  else if (form.pj_code.length === 11) {
-    valueX = 596
-  }
-  else if (form.pj_code.length === 12) {
-    valueX = 590
-  }
+  //let url = 'http://10.62.38.51:3300/' // for local
+  let url = 'https://mb.mahidol.ac.th/mb_certificate/#/' // for server
+ 
   signOption(form)
   excel.forEach((e, index) => {
     s.push(
@@ -211,12 +190,14 @@ function run(excel, form) {
 
       {
         text: (excel.length === 1) ? 'CERTIFICATION NUMBER  ' + form.currentYear + '-' + form.pj_code + '-' + form.no.toString().padStart(4, '0') : 'CERTIFICATION NUMBER  ' + form.currentYear + '-' + form.pj_code + '-' + String(index + 1).padStart(4, '0'),
+        alignment: 'right',
         fontSize: 9,
         font: 'THSarabunNew',
-        absolutePosition: { x: valueX, y: 40 }
+        absolutePosition: { y: 40 }
+        //absolutePosition: { x: valueX, y: 40 }
       },
 
-      (excel.length === 1) ? { qr: `${url}` + 'show-pdf/path?' + `param1=${form.pj_code}` + '&' + `param2=${form.no}`, fit: 60, absolutePosition: { x: 760, y: 60 } } : { qr: `${url}` + 'show-pdf/path?' +  `param1=${form.pj_code}` + '&' + `param2=${e.no}`, fit: 60, absolutePosition: { x: 760, y: 60 } },
+      (excel.length === 1) ? { qr: `${url}` + 'show-pdf/path?' + `param1=${form.pj_code}` + '&' + `param2=${form.no}`, fit: 60, alignment: 'right', absolutePosition: { y: 60 } } : { qr: `${url}` + 'show-pdf/path?' +  `param1=${form.pj_code}` + '&' + `param2=${e.no}`, fit: 60, alignment: 'right', absolutePosition: { y: 60 } },
 
       (form.language === "Eng") ? { text: 'Institute of  Molecular Biosciences', color: '#1565C0', fontSize: 24, absolutePosition: { x: 50, y: 120 } } : {},
       (form.language === "Eng") ? { text: 'Mahidol University ', color: '#1565C0', fontSize: 24, absolutePosition: { x: 50, y: 150 } } : {},
