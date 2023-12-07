@@ -166,7 +166,7 @@ export default {
         (v) => !!v || "กรุณาใส่รหัสโครงการ",
         (v) =>
           /^[A-Z0-9-]*$/.test(v) ||
-          "กรุณาใส่ตัวอักษร ตัวเลข หรือเครื่องหมายลบเท่านั้น",
+          "กรุณาใส่ตัวอักษรพิมพ์ใหญ่ ตัวเลข หรือเครื่องหมายลบเท่านั้น",
       ],
       twoSignRule: [
         (v) => (this.form.two_sign ? !!v || "กรุณาใส่ข้อความ" : true),
@@ -220,6 +220,9 @@ export default {
         if (result.isConfirmed) {
           this.setData(this.form);
           this.clearCreatePDF();
+        } else {
+          this.clearCreatePDF();
+          this.preview = false;
         }
       });
     },
