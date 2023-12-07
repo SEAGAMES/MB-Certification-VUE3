@@ -173,8 +173,8 @@ function run(excel, form) {
   let s = []
   let valueMargin = 15
 
-  //let url = 'http://10.62.38.51:3300/' // for local
-  let url = 'https://mb.mahidol.ac.th/mb_certificate/#/' // for server
+  let url = 'http://10.62.38.51:3300/' // for local
+  //let url = 'https://mb.mahidol.ac.th/mb_certificate/#/' // for server
  
   signOption(form)
   excel.forEach((e, index) => {
@@ -211,7 +211,7 @@ function run(excel, form) {
       },
 
       (form.language === "TH" && form.pj_code.substring(0, 3) === 'PAR') ? {
-        text: 'เข้าอบรมเชิงปฏิบัติการเรื่อง '
+        text: 'เข้าอบรมเชิงปฏิบัติการเรื่อง ', alignment: 'center'
       } : (form.language === "TH" && form.pj_code.substring(0, 4) === 'ASST') ? { text: 'เป็นผู้ช่วยวิทยากรในการอบรมเชิงปฏิบัติการเรื่อง' } : {},
 
       (form.language === "Eng" && form.pj_code.substring(0, 3) === 'PAR') ? { text: 'participated in the practical training entitled', absolutePosition: { x: 50, y: 265 + valueMargin } } : (form.language === "Eng" && form.pj_code.substring(0, 4) === 'ASST') ? { text: 'is an assistant on practical training entitled', absolutePosition: { x: 50, y: 265 + valueMargin } } : {},
@@ -223,7 +223,7 @@ function run(excel, form) {
       (form.language === "TH")
         ? { text: "“" + form.pj_name + "”", color: '#1565C0', fontSize: 24, absolutePosition: { x: 50, y: 250 + valueMargin } }
         : (form.language === "Eng" && (form.pj_code.substring(0, 3) === 'PAR' || form.pj_code.substring(0, 4) === 'ASST'))
-          ? { text: 'Student Science Training Program' + ' ' + form.currentYear, color: '#1565C0', fontSize: 28, absolutePosition: { x: 50, y: 300 + valueMargin }, bold: true }
+          ? { text: form.pj_name, color: '#1565C0', fontSize: 28, alignment: 'center', absolutePosition: { y: 300 + valueMargin }, bold: true }
           : { text: "“" + form.pj_name + "”", color: '#1565C0', fontSize: 24, absolutePosition: { x: 50, y: 280 + valueMargin } },
 
 
