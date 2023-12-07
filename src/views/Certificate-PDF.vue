@@ -206,6 +206,24 @@ export default {
     this.form = { ...this.form, ...dataFormLocal }; //กำหนดค่าทุก property ของ dataFormLocal ลงใน this.form.
   },
   methods: {
+    //บันทักข้อมูลสำเร็จ ต้องการไปยังหน้า Detail เพื่อ Print หรือไม่
+    showAler_AfterSuccess() {
+      Swal.fire({
+        title: "บันทักข้อมูลสำเร็จ",
+        text: "ต้องการไปยังหน้า Detail เพื่อ Print หรือไม่",
+        icon: "success",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ไปหน้า Print",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.setData(this.form);
+          this.clearCreatePDF();
+        }
+      });
+    },
+
     showAlert(icon, title) {
       Swal.fire({
         position: "center",
@@ -314,10 +332,7 @@ export default {
           // กรณี insert master เเละ detail สำเร็จ
           if (resultInsert.data.msg === "ok") {
             await apiCertificate.getDataCertificate_master();
-            // const data = await apiCertificate.getDataCertificate();
-            // this.$store.state.certificate_data = data.data
-            this.showAlert("success", "บันทักข้อมูลสำเร็จ");
-            this.clearCreatePDF();
+            this.showAler_AfterSuccess();
           } else {
             this.showAlert("error", "บันทึกไม่สำเร็จ");
           }
@@ -329,6 +344,18 @@ export default {
         this.loadingBtn = false;
         this.showDialog = false;
       }, 1500);
+    },
+
+    // เก็บค่ากรณีผู้ใช้จะกดไปหน้า detail หลัง create เสร็จ
+    setData(data) {
+      // แปลง 0 กับ 1 เป็น true กับ false
+      data.sign = data.sign === 1;
+      data.two_sign = data.two_sign === 1;
+      localStorage.setItem("certificate_data", JSON.stringify(data));
+      this.$store.state.certificate_data = data;
+      this.$router.push({
+        name: "Certificate-Edit",
+      });
     },
   },
 

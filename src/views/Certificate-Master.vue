@@ -69,7 +69,7 @@ export default {
           title: "รหัสโครงการ",
         },
         { align: "center", key: "pj_name", title: "ชื่อโครงการ" },
-        { key: "language", title: "ภาษา" },
+        { align: "center", key: "language", title: "ภาษา" },
         { align: "center", key: "currentYear", title: "ปี" },
         { align: "center", key: "date_desc", title: "อบรมวันที่" },
         { align: "center", title: "Action" },
