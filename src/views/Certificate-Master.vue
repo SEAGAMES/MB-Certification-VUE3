@@ -1,37 +1,50 @@
 <template >
   <v-container class="fontSarabun">
-    <v-data-table
-      :headers="headers"
-      :items="dataLoad.data"
-      :items-per-page="10"
-      :search="search"
-    >
-      <template v-slot:item="{ item }">
-        <tr align="center">
-          <td>{{ item.pj_code }}</td>
-          <td>{{ item.pj_name }}</td>
-          <!-- <td>{{ item.language }}</td> -->
-          <v-chip :color="getColor(item.language)">
-            {{ item.language }}
-          </v-chip>
-          <td>{{ item.currentYear }}</td>
-          <td>{{ item.date_desc }}</td>
-          <td>
-            <div style="display: flex; gap: 10px">
-              <v-icon
-                @click="editCertificate(item)"
-                style="color: rgb(243, 156, 18)"
-                >mdi-pencil</v-icon
-              >
-              <v-icon
-                @click="deleteCertificate(item.pj_code)"
-                style="color: rgb(255, 0, 0)"
-                >mdi-delete</v-icon
-              >
-            </div>
-          </td>
-        </tr>
-      </template></v-data-table
+    <v-card>
+      <v-card-title>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+          width="100"
+        ></v-text-field>
+      </v-card-title>
+
+      <v-data-table
+        :headers="headers"
+        :items="dataLoad.data"
+        :items-per-page="10"
+        :search="search"
+      >
+        <template v-slot:item="{ item }">
+          <tr align="center">
+            <td>{{ item.pj_code }}</td>
+            <td>{{ item.pj_name }}</td>
+            <!-- <td>{{ item.language }}</td> -->
+            <v-chip :color="getColor(item.language)">
+              {{ item.language }}
+            </v-chip>
+            <td>{{ item.currentYear }}</td>
+            <td>{{ item.date_desc }}</td>
+            <td>
+              <div style="display: flex; gap: 10px">
+                <v-icon
+                  @click="editCertificate(item)"
+                  style="color: rgb(243, 156, 18)"
+                  >mdi-pencil</v-icon
+                >
+                <v-icon
+                  @click="deleteCertificate(item.pj_code)"
+                  style="color: rgb(255, 0, 0)"
+                  >mdi-delete</v-icon
+                >
+              </div>
+            </td>
+          </tr>
+        </template></v-data-table
+      ></v-card
     >
   </v-container>
 </template>

@@ -147,7 +147,7 @@
   <v-row justify="center">
     <div>
       <!-- ใช้ <iframe> เพื่อแสดงไฟล์ PDF -->
-      <iframe :src="base_64" ref="pdfIframe" v-if="preview"></iframe>
+      <iframe :src="urlWithPreferences" ref="pdfIframe" v-if="preview"></iframe>
     </div>
   </v-row>
 </template>
@@ -194,6 +194,7 @@ export default {
       showDialog: false,
       loadingBtn: false,
     };
+    
   },
   async mounted() {
     const dataFormLocal = JSON.parse(localStorage.getItem("create_pdf")) || {};
@@ -316,6 +317,13 @@ export default {
         this.loadingBtn = false;
         this.showDialog = false;
       }, 1500);
+    },
+  },
+
+  computed: {
+    urlWithPreferences() {
+      // เพิ่ม viewer preferences ลงใน URL
+      return `${this.base_64}#toolbar=0&navpanes=0&scrollbar=0`;
     },
   },
 

@@ -220,10 +220,11 @@ function run(excel, form) {
       //   text: 'Student Science Training Program' + ' ' + form.currentYear, color: '#1565C0', fontSize: 28, absolutePosition: { x: 50, y: 300 + valueMargin }, bold: true,
       // } : {},
 
+      //alignment: 'center'
       (form.language === "TH")
         ? { text: "“" + form.pj_name + "”", color: '#1565C0', fontSize: 24, absolutePosition: { x: 50, y: 250 + valueMargin } }
         : (form.language === "Eng" && (form.pj_code.substring(0, 3) === 'PAR' || form.pj_code.substring(0, 4) === 'ASST'))
-          ? { text: form.pj_name, color: '#1565C0', fontSize: 28, alignment: 'center', absolutePosition: { y: 300 + valueMargin }, bold: true }
+          ? { text: form.pj_name, color: '#1565C0', fontSize: 28, absolutePosition: { x: 50, y: 300 + valueMargin }, bold: true }
           : { text: "“" + form.pj_name + "”", color: '#1565C0', fontSize: 24, absolutePosition: { x: 50, y: 280 + valueMargin } },
 
 
