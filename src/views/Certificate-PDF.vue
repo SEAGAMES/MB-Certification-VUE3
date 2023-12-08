@@ -210,12 +210,12 @@ export default {
     showAler_AfterSuccess() {
       Swal.fire({
         title: "บันทักข้อมูลสำเร็จ",
-        text: "ต้องการไปยังหน้า Detail เพื่อ Print หรือไม่",
+        text: "ต้องการไปยังหน้า PDF เพื่อสั่ง Print หรือไม่",
         icon: "success",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "ไปหน้า Print",
+        confirmButtonText: "ไปหน้า PDF",
       }).then((result) => {
         if (result.isConfirmed) {
           this.setData(this.form);
