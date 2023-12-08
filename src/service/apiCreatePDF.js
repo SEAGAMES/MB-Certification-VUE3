@@ -173,7 +173,7 @@ function run(excel, form) {
   let s = []
   let valueMargin = 15
 
-  let url = 'http://10.62.38.51:3300/' // for local
+  let url = 'http://10.62.40.186:3300/' // for local
   //let url = 'https://mb.mahidol.ac.th/mb_certificate/#/' // for server
  
   signOption(form)

@@ -10,7 +10,7 @@ const getUrl = (type) => {
 
     if (type === "mu_auth") url = "https://mb.mahidol.ac.th/mbenter";  // mahidol
     if (type === "api") url = "https://mb.mahidol.ac.th/seapi/";  // backend
-    console.log('url : ', url)
+    //console.log('url : ', url)
     return url;
 }
 export const getWebUrl = getUrl;
