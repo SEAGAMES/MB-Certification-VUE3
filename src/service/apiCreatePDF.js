@@ -46,7 +46,8 @@ const certification_pdf = async (excel, form) => {
 
     images: {
       logo: imgFromBase64.logo_mu,
-      sign: imgFromBase64.mysign,
+      sign_th: imgFromBase64.sign_th,
+      sign_eng: imgFromBase64.sign_eng,
       footer_th: imgFromBase64.myfoot_th,
       footer_eng: imgFromBase64.myfoot_eng
 
@@ -108,7 +109,7 @@ function signOption(form) {
       if (form.sign) { // TH 1 ลายเซ็น ผอ. เซ็น
         data = [
           {
-            image: 'sign',
+            image: 'sign_th',
             width: 250,
             height: 80,
             absolutePosition: { x: 70, y: 410 }
@@ -149,7 +150,7 @@ function signOption(form) {
         // console.log('ENG 1Sign Sign')
         data = [
           {
-            image: 'sign',
+            image: 'sign_eng',
             width: 250,
             height: 80,
             absolutePosition: { x: 60, y: 415 }
