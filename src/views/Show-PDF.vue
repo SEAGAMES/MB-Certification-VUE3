@@ -9,7 +9,7 @@
 
 <script>
 import Swal from "sweetalert2";
-import dataQrCode from "../service/apiCertificate";
+import apiCertificate from "../service/apiCertificate";
 import createPDF from "@/service/apiCreatePDF";
 export default {
   data() {
@@ -20,12 +20,24 @@ export default {
   },
   async mounted() {
     // console.log(this.$route.query.param1, this.$route.query.param2)
-    const { data } = await dataQrCode.getDataQrCode(this.$route.query.param1, this.$route.query.param2);
-    if (data.msg === "not found") {
-      this.showAlert("error", "Certificate Not Found !!");
+    let name = [];
+    if (this.$route.query.param2) {
+      const { data } = await apiCertificate.getDataQrCode(
+        this.$route.query.param1,
+        this.$route.query.param2
+      );
+      if (data.msg === "not found") {
+        this.showAlert("error", "Certificate Not Found !!");
+      } else {
+        name.push({ prefix: data.data[0].prefix, name: data.data[0].name });
+        await this.createPDF(data.data[0], name);
+        this.preview = true;
+      }
     } else {
-      const name = [];
-      name.push({ prefix: data.data[0].prefix, name: data.data[0].name });
+      const { data } = await apiCertificate.dataInPjcode(
+        this.$route.query.param1
+      );
+      name = data.data;
       await this.createPDF(data.data[0], name);
       this.preview = true;
     }

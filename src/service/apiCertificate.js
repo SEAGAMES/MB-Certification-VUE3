@@ -6,6 +6,11 @@ const getDataQrCode = async(pj_code, no) => {
     return data
 }
 
+const dataInPjcode = async(pj_code) => {
+    const data = await axios.get(`${apiUrl}getDataAllPjcode/${pj_code}`)
+    return data
+}
+
 const createCertificate = async(data, excel) => {
     const newData = []
     newData.push(data, excel)
@@ -55,6 +60,7 @@ const deleteCertificate = async(pj_code) => {
   
 export default {
     getDataQrCode,
+    dataInPjcode,
     createCertificate,
     updateCertificate,
     getDataCertificate_master,

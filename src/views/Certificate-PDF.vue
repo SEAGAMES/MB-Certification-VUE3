@@ -349,16 +349,18 @@ export default {
       }, 1500);
     },
 
-    // เก็บค่ากรณีผู้ใช้จะกดไปหน้า detail หลัง create เสร็จ
+    // เก็บค่ากรณีผู้ใช้จะกดไปหน้า print ให้ส่งไปหน้า showpdf
     setData(data) {
+      this.$router.push({ path: '/show-pdf/path', query: { param1: data.pj_code } });
+
       // แปลง 0 กับ 1 เป็น true กับ false
-      data.sign = data.sign === 1;
-      data.two_sign = data.two_sign === 1;
-      localStorage.setItem("certificate_data", JSON.stringify(data));
-      this.$store.state.certificate_data = data;
-      this.$router.push({
-        name: "Certificate-Edit",
-      });
+      // data.sign = data.sign === 1;
+      // data.two_sign = data.two_sign === 1;
+      // localStorage.setItem("certificate_data", JSON.stringify(data));
+      // this.$store.state.certificate_data = data;
+      // this.$router.push({
+      //   name: "Certificate-Edit",
+      // });
     },
   },
 
