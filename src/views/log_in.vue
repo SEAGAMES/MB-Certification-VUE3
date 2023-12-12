@@ -1,14 +1,4 @@
-<template>
-  <div class="container">
-    <br />
-    <h1 class="text-center">{{ text }}</h1>
-    <div class="d-grid gap-2">
-      <button class="btn btn-primary" type="btn button" @click="force_login()">
-        บุคลากร MB
-      </button>
-    </div>
-  </div>
-</template>
+
 
 <script>
 import axios from "axios";
@@ -20,6 +10,7 @@ export default {
       myTimeout: null,
     };
   },
+
   methods: {
     login() {
       axios.post("/login", { c: this.$route.query.c }).then((res) => {
@@ -65,9 +56,9 @@ export default {
     } else {
       const { getWebUrl } = require("../service/getUrl");
       console.log("เข้ามา3");
-      this.myTimeout = setTimeout(function () {
+      //this.myTimeout = setTimeout(function () {
         window.location = getWebUrl("mu_auth") + "/login" + "?src=fix";
-      }, 10000);
+      // }, 10000);
     }
   },
   beforeUnmount() {
