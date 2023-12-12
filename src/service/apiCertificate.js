@@ -1,6 +1,19 @@
 import axios from "axios"
 import { apiUrl } from '../service/getUrl'
 
+
+const checkLogin = async() => {
+    const data = await axios.get(`${apiUrl}`)
+    return data.data.msg
+}
+
+const login = async() => {
+   await axios.get(`${apiUrl}login`)
+
+    const result = await axios.get(`${apiUrl}login`)
+    console.log(result)
+}
+
 const getDataQrCode = async(pj_code, no) => {
     const data = await axios.get(`${apiUrl}data_formqrcode/${pj_code}/${no}`)
     return data
@@ -68,5 +81,7 @@ export default {
     duplicateCheck,
     editName,
     deleteCertificate,
-    getDataCertificate_detail
+    getDataCertificate_detail,
+    login,
+    checkLogin
 }

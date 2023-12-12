@@ -155,6 +155,7 @@
 <script>
 import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 import createPDF from "../service/apiCreatePDF";
 import apiCertificate from "../service/apiCertificate";
 
@@ -202,10 +203,42 @@ export default {
     };
   },
   async mounted() {
+    await this.login();
+
     const dataFormLocal = JSON.parse(localStorage.getItem("create_pdf")) || {};
     this.form = { ...this.form, ...dataFormLocal }; //กำหนดค่าทุก property ของ dataFormLocal ลงใน this.form.
   },
   methods: {
+    async login() {
+      const accessToken = Cookies.get("accessToken");
+      // ทำสิ่งที่คุณต้องการกับ accessToken ที่ได้
+      console.log("AccessToken:", accessToken);
+
+      if (!accessToken) {
+        // แทนที่ URL นี้ด้วย URL จริง ๆ ที่ backend ของคุณอยู่
+        const backendUrl = "http://localhost:3000/login";
+
+        // สร้าง iframe
+        const authIframe = document.createElement("iframe");
+        authIframe.src = backendUrl;
+        authIframe.style.display = "none";
+
+        // เพิ่ม iframe เข้าไปใน DOM
+        document.body.appendChild(authIframe);
+
+        // ตั้งค่า interval เพื่อตรวจสอบผลลัพธ์การตรวจสอบ
+        const intervalId = setInterval(() => {
+          // ตรวจสอบว่า iframe ถูกลบหรือไม่ (หลังจากการเข้าสู่ระบบเสร็จสิ้น)
+          if (!document.body.contains(authIframe)) {
+            clearInterval(intervalId);
+
+            // ดำเนินการหลังจากการตรวจสอบเสร็จสิ้น เช่น การเปลี่ยนทิศทางหรือแสดงข้อมูลผู้ใช้
+            this.checkAuthenticationResult();
+          }
+        }, 1000);
+      }
+    },
+
     //บันทักข้อมูลสำเร็จ ต้องการไปยังหน้า Detail เพื่อ Print หรือไม่
     showAler_AfterSuccess() {
       Swal.fire({
