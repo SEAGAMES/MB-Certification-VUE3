@@ -216,6 +216,8 @@ export default {
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "ไปหน้า PDF",
+        allowOutsideClick: false, // ไม่ให้คลิกภายนอก dialog
+        allowEscapeKey: false, // ไม่ให้ใช้ปุ่ม Escape
       }).then((result) => {
         if (result.isConfirmed) {
           this.setData(this.form);
@@ -351,7 +353,10 @@ export default {
 
     // เก็บค่ากรณีผู้ใช้จะกดไปหน้า print ให้ส่งไปหน้า showpdf
     setData(data) {
-      this.$router.push({ path: '/show-pdf/path', query: { param1: data.pj_code } });
+      this.$router.push({
+        path: "/show-pdf/path",
+        query: { param1: data.pj_code },
+      });
 
       // แปลง 0 กับ 1 เป็น true กับ false
       // data.sign = data.sign === 1;
