@@ -15,7 +15,7 @@
                 ></v-text-field></v-col
               ><v-col
                 ><v-row
-                  ><v-col cols="4" >
+                  ><v-col cols="4">
                     <v-switch
                       v-model="form.language"
                       @change="saveCreatePDF"
@@ -49,7 +49,7 @@
                   id="pj_name"
                   v-model="form.pj_code"
                   @change="saveCreatePDF"
-                  :rules="textRule"
+                  :rules="pjCodeRule"
                   @input="handleInput"
                   required
                 ></v-text-field
@@ -147,7 +147,7 @@
   <v-row justify="center">
     <div>
       <!-- ใช้ <iframe> เพื่อแสดงไฟล์ PDF -->
-      <iframe :src="base_64" ref="pdfIframe" v-if="preview"></iframe>
+      <iframe :src="urlWithPreferences" ref="pdfIframe" v-if="preview"></iframe>
     </div>
   </v-row>
 </template>
@@ -162,6 +162,12 @@ export default {
   data() {
     return {
       textRule: [(v) => !!v || "กรุณาใส่ข้อความ"],
+      pjCodeRule: [
+        (v) => !!v || "กรุณาใส่รหัสโครงการ",
+        (v) =>
+          /^[A-Z0-9-]*$/.test(v) ||
+          "กรุณาใส่ตัวอักษรพิมพ์ใหญ่ ตัวเลข หรือเครื่องหมายลบเท่านั้น",
+      ],
       twoSignRule: [
         (v) => (this.form.two_sign ? !!v || "กรุณาใส่ข้อความ" : true),
       ],
@@ -200,6 +206,27 @@ export default {
     this.form = { ...this.form, ...dataFormLocal }; //กำหนดค่าทุก property ของ dataFormLocal ลงใน this.form.
   },
   methods: {
+    //บันทักข้อมูลสำเร็จ ต้องการไปยังหน้า Detail เพื่อ Print หรือไม่
+    showAler_AfterSuccess() {
+      Swal.fire({
+        title: "บันทักข้อมูลสำเร็จ",
+        text: "ต้องการไปยังหน้า PDF เพื่อสั่ง Print หรือไม่",
+        icon: "success",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ไปหน้า PDF",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.setData(this.form);
+          this.clearCreatePDF();
+        } else {
+          this.clearCreatePDF();
+          this.preview = false;
+        }
+      });
+    },
+
     showAlert(icon, title) {
       Swal.fire({
         position: "center",
@@ -276,14 +303,21 @@ export default {
     // เช็กเมื่อกดปุ่ม save to db
     validateCheck() {
       this.$refs.form.validate();
-      if (this.form.pj_code && this.form.pj_name && this.form.date_desc) {
-        if (
-          !this.form.two_sign ||
-          (this.form.add_name && this.form.add_position)
-        ) {
-          this.showDialog = true;
+
+      this.$refs.form.validate().then((result) => {
+        // ตรวจสอบค่า valid
+        if (result.valid) {
+          // ตรวจสอบผ่าน
+          if (this.form.pj_code && this.form.pj_name && this.form.date_desc) {
+            if (
+              !this.form.two_sign ||
+              (this.form.add_name && this.form.add_position)
+            ) {
+              this.showDialog = true;
+            }
+          }
         }
-      }
+      });
     },
 
     async savePdfToDB() {
@@ -301,10 +335,7 @@ export default {
           // กรณี insert master เเละ detail สำเร็จ
           if (resultInsert.data.msg === "ok") {
             await apiCertificate.getDataCertificate_master();
-            // const data = await apiCertificate.getDataCertificate();
-            // this.$store.state.certificate_data = data.data
-            this.showAlert("success", "บันทักข้อมูลสำเร็จ");
-            this.clearCreatePDF();
+            this.showAler_AfterSuccess();
           } else {
             this.showAlert("error", "บันทึกไม่สำเร็จ");
           }
@@ -316,6 +347,27 @@ export default {
         this.loadingBtn = false;
         this.showDialog = false;
       }, 1500);
+    },
+
+    // เก็บค่ากรณีผู้ใช้จะกดไปหน้า print ให้ส่งไปหน้า showpdf
+    setData(data) {
+      this.$router.push({ path: '/show-pdf/path', query: { param1: data.pj_code } });
+
+      // แปลง 0 กับ 1 เป็น true กับ false
+      // data.sign = data.sign === 1;
+      // data.two_sign = data.two_sign === 1;
+      // localStorage.setItem("certificate_data", JSON.stringify(data));
+      // this.$store.state.certificate_data = data;
+      // this.$router.push({
+      //   name: "Certificate-Edit",
+      // });
+    },
+  },
+
+  computed: {
+    urlWithPreferences() {
+      // เพิ่ม viewer preferences ลงใน URL
+      return `${this.base_64}#toolbar=0&navpanes=0&scrollbar=0`;
     },
   },
 

@@ -9,7 +9,7 @@
 
 <script>
 import Swal from "sweetalert2";
-import dataQrCode from "../service/apiCertificate";
+import apiCertificate from "../service/apiCertificate";
 import createPDF from "@/service/apiCreatePDF";
 export default {
   data() {
@@ -19,23 +19,26 @@ export default {
     };
   },
   async mounted() {
-    console.log('มา')
-    // สร้าง URL object
-    const url = new URL(window.location.href);
-
-    // สร้าง URLSearchParams object
-    const urlParams = new URLSearchParams(url.search);
-
-    // ดึงค่าจาก URLSearchParams
-    const param1Value = urlParams.get("param1");
-    const param2Value = urlParams.get("param2");
-
-    const { data } = await dataQrCode.getDataQrCode(param1Value, param2Value);
-    if (data.msg === "not found") {
-      this.showAlert("error", "Certificate Not Found !!");
+    // console.log(this.$route.query.param1, this.$route.query.param2)
+    let name = [];
+    if (this.$route.query.param2) {
+      const { data } = await apiCertificate.getDataQrCode(
+        this.$route.query.param1,
+        this.$route.query.param2
+      );
+      if (data.msg === "not found") {
+        this.showAlert("error", "Certificate Not Found !!");
+      } else {
+        data.data[0].sign = true
+        name.push({ prefix: data.data[0].prefix, name: data.data[0].name });
+        await this.createPDF(data.data[0], name);
+        this.preview = true;
+      }
     } else {
-      const name = [];
-      name.push({ prefix: data.data[0].prefix, name: data.data[0].name });
+      const { data } = await apiCertificate.dataInPjcode(
+        this.$route.query.param1
+      );
+      name = data.data;
       await this.createPDF(data.data[0], name);
       this.preview = true;
     }
