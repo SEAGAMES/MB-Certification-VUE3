@@ -29,6 +29,7 @@ export default {
       if (data.msg === "not found") {
         this.showAlert("error", "Certificate Not Found !!");
       } else {
+        //data.data[0].sign = true
         name.push({ prefix: data.data[0].prefix, name: data.data[0].name });
         await this.createPDF(data.data[0], name);
         this.preview = true;
@@ -38,6 +39,7 @@ export default {
         this.$route.query.param1
       );
       name = data.data;
+      console.log(data.data[0])
       await this.createPDF(data.data[0], name);
       this.preview = true;
     }

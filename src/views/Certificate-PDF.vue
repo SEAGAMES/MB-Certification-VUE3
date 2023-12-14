@@ -202,10 +202,19 @@ export default {
     };
   },
   async mounted() {
+    //await this.login();
+
     const dataFormLocal = JSON.parse(localStorage.getItem("create_pdf")) || {};
     this.form = { ...this.form, ...dataFormLocal }; //กำหนดค่าทุก property ของ dataFormLocal ลงใน this.form.
   },
   methods: {
+    async login() {
+      console.log("login");
+      this.$router.push({
+        name: "Login",
+      });
+    },
+
     //บันทักข้อมูลสำเร็จ ต้องการไปยังหน้า Detail เพื่อ Print หรือไม่
     showAler_AfterSuccess() {
       Swal.fire({
