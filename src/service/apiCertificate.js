@@ -2,7 +2,6 @@ import axios from "axios"
 import { apiUrl } from '../service/getUrl'
 
 const getDataQrCode = async(pj_code, no) => {
-    // console.log(pj_code, no)
     const data = await axios.get(`${apiUrl}data_formqrcode/${pj_code}/${no}`)
     return data
 }

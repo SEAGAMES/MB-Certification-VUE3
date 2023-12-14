@@ -2,6 +2,11 @@
 import { createRouter, createWebHistory } from "vue-router"; // for local
 //import { createRouter, createWebHashHistory } from "vue-router"; // for server 
 
+import middlewarePipeline from "./middlewarePipeline";
+import store from "../store";
+import axios from "axios";
+import auth from "./middleware/auth";
+
 const routes = [
   {
     path: "/",
@@ -11,6 +16,9 @@ const routes = [
     path: "/certificate-main",
     name: "Certificate-Main",
     component: () => import("../views/MainPage.vue"),
+    meta: {
+      middleware: [auth],
+    },
   },
   {
     path: "/certificate-pdf",
@@ -44,5 +52,23 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  //console.log(to.meta.middleware)
+  if (!to.meta.middleware) {
+    return next();
+  }
+  const middleware = to.meta.middleware;
+  const context = {
+    to,
+    from,
+    next,
+    store,
+    axios,
+  };
+  return middleware[0]({
+    ...context,
+    next: middlewarePipeline(context, middleware, 1),
+  });
+});
 
 export default router;

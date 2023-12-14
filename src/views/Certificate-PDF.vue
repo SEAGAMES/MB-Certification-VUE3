@@ -202,19 +202,10 @@ export default {
     };
   },
   async mounted() {
-    //await this.login();
-
     const dataFormLocal = JSON.parse(localStorage.getItem("create_pdf")) || {};
     this.form = { ...this.form, ...dataFormLocal }; //กำหนดค่าทุก property ของ dataFormLocal ลงใน this.form.
   },
   methods: {
-    async login() {
-      console.log("login");
-      this.$router.push({
-        name: "Login",
-      });
-    },
-
     //บันทักข้อมูลสำเร็จ ต้องการไปยังหน้า Detail เพื่อ Print หรือไม่
     showAler_AfterSuccess() {
       Swal.fire({
@@ -225,8 +216,6 @@ export default {
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "ไปหน้า PDF",
-        allowOutsideClick: false, // ไม่ให้คลิกภายนอก dialog
-        allowEscapeKey: false, // ไม่ให้ใช้ปุ่ม Escape
       }).then((result) => {
         if (result.isConfirmed) {
           this.setData(this.form);
@@ -362,10 +351,7 @@ export default {
 
     // เก็บค่ากรณีผู้ใช้จะกดไปหน้า print ให้ส่งไปหน้า showpdf
     setData(data) {
-      this.$router.push({
-        path: "/show-pdf/path",
-        query: { param1: data.pj_code },
-      });
+      this.$router.push({ path: '/show-pdf/path', query: { param1: data.pj_code } });
 
       // แปลง 0 กับ 1 เป็น true กับ false
       // data.sign = data.sign === 1;
