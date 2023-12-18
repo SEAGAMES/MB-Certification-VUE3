@@ -61,7 +61,6 @@ export default function guest({ next, axios,store }) {
     }
     else {
         console.log("no token in auth page")
-
     return next({
             name: 'Log_in'
         })
