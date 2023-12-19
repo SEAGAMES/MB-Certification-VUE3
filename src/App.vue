@@ -2,6 +2,7 @@
   <v-app>
     <v-main>
       <router-view />
+      <!-- <LanguagePageVue/> -->
     </v-main>
   </v-app>
 </template>
@@ -9,7 +10,12 @@
 <script>
 import axios from "axios";
 const { getWebUrl } = require("./service/getUrl");
+//import LanguagePageVue from './components/LanguagePage.vue'
 export default {
+  // components: {
+  //   LanguagePageVue
+  // },
+  
   name: "App",
 
   data: () => ({
