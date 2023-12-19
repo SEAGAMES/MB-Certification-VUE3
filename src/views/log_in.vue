@@ -49,13 +49,14 @@ export default {
       await axios.post("/login", { c: this.$route.query.c }).then((res) => {
         console.log('c : ', this.$route.query.c)
         const data = res.data;
-        console.log(data)
+        console.log("data.msg : " , data.msg)
 
         if (data.msg === "ok") {
+          console.log('เข้ามา')
           localStorage.removeItem("MB-app");
           localStorage.setItem("MB-app", data.token);
           axios.defaults.headers.common["Authorization"] = localStorage.getItem("MB-app"); //for all request
-          this.$router.push({ path: '/home' })   // ส่งไปที่นี้
+          this.$router.push({ path: '../views/MainPage.vue' })   // ส่งไปที่นี้
         }
         else {
           console.log("ไม่พบรายชื่อ")

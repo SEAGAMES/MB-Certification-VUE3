@@ -75,7 +75,6 @@ const certification_pdf = async (excel, form) => {
     }
   }
 
-  //const result = await createPDF(docDefinition);
   const result = pdfMake.createPdf(docDefinition)
   return result
 }

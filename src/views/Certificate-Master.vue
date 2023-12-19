@@ -30,6 +30,9 @@
             <td>{{ item.date_desc }}</td>
             <td>
               <div style="display: flex; gap: 10px">
+                <v-icon @click="printPDF(item)" style="color: rgb(55, 136, 176)"
+                  >mdi-printer</v-icon
+                >
                 <v-icon
                   @click="editCertificate(item)"
                   style="color: rgb(243, 156, 18)"
@@ -44,14 +47,42 @@
             </td>
           </tr>
         </template></v-data-table
-      ></v-card
+      >
+    </v-card>
+
+    <v-dialog
+      v-model="preview"
+      persistent
+      max-height="800"
+      max-width="800"
+      width="80%"
     >
+      <v-card elevation="0" dark class="custom-color">
+        <v-toolbar dark class="custom-color" height="30">
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn variant="text" @click="preview = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-row justify="center">
+          <div>
+            <!-- ใช้ <iframe> เพื่อแสดงไฟล์ PDF -->
+            <iframe :src="base_64" ref="pdfIframe"></iframe>
+          </div>
+        </v-row>
+        <v-toolbar dark class="custom-color" height="25">
+          <v-spacer></v-spacer>
+        </v-toolbar>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
-//import { ref } from "vue";
 import Swal from "sweetalert2";
+import createPDF from "../service/apiCreatePDF";
 import apiCertificate from "@/service/apiCertificate";
 
 export default {
@@ -59,8 +90,9 @@ export default {
     return {
       search: "",
       dataLoad: [],
-      data_certificate: [],
-
+      dataDetail: [],
+      base_64: null,
+      preview: false,
       headers: [
         {
           align: "center",
@@ -85,6 +117,39 @@ export default {
     getColor(language) {
       if (language === "TH") return "green";
       else return "red";
+    },
+
+    async dataStorage() {
+      const data = await apiCertificate.getDataCertificate_detail(
+        this.dataStorage
+      );
+      this.dataDetail = data.data;
+    },
+
+    async printPDF(data) {
+      const result = await apiCertificate.getDataCertificate_detail(data);
+      this.dataStorage = data;
+      this.dataDetail = result.data;
+
+      await this.createPDFShow();
+    },
+
+    async createPDFShow() {
+      const pdfDocGenerator = await createPDF.certification_pdf(
+        this.dataDetail.data,
+        this.dataStorage
+      );
+
+      pdfDocGenerator.getDataUrl((dataUrl) => {
+        this.base_64 = dataUrl;
+        const iframe = this.$refs.pdfIframe;
+        iframe.src = dataUrl;
+
+        // กำหนดความกว้างและความสูงของ iframe ตรงนี้
+        iframe.style.width = "770px"; // เปลี่ยนเป็นค่าที่คุณต้องการ
+        iframe.style.height = "600px"; // เปลี่ยนเป็นค่าที่คุณต้องการ
+      });
+      this.preview = true;
     },
 
     deleteAlert(pj_code) {
@@ -148,4 +213,7 @@ export default {
 </script>
 
 <style>
+.custom-color {
+  background-color: #ffffff;
+}
 </style>

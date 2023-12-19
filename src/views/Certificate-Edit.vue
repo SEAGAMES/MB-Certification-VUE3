@@ -285,10 +285,11 @@ export default {
         this.dataDetail.data,
         this.dataStorage
       );
-
+      
       pdfDocGenerator.getDataUrl((dataUrl) => {
         this.base_64 = dataUrl;
         const iframe = this.$refs.pdfIframe;
+        console.log(this.$refs)
         iframe.src = dataUrl;
 
         // กำหนดความกว้างและความสูงของ iframe ตรงนี้
