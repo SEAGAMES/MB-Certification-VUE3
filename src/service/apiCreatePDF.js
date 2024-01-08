@@ -110,8 +110,8 @@ function signOption(form) {
         data = [
           {
             image: 'sign_th',
-            width: 250,
-            height: 80,
+            width: 220,
+            height: 70,
             absolutePosition: { x: 70, y: 410 }
           }
         ]
@@ -227,7 +227,7 @@ function run(excel, form) {
       (form.language === "Eng") ? {
         text: e.prefix + ' ' + e.name, color: '#0D47A1', fontSize: 34, absolutePosition: { x: 50, y: 215 + valueMargin }, bold: true,
       } : {
-        text: e.prefix + ' ' + e.name, color: '#0D47A1', fontSize: 28
+        text: e.prefix.trim() + e.name, color: '#0D47A1', fontSize: 28
       },
 
       (form.language === "TH" && form.pj_code.substring(0, 3) === 'PAR') ? {
