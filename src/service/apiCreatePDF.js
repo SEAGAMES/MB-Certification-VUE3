@@ -46,7 +46,8 @@ const certification_pdf = async (excel, form) => {
 
     images: {
       logo: imgFromBase64.logo_mu,
-      sign: imgFromBase64.mysign,
+      sign_th: imgFromBase64.sign_th,
+      sign_eng: imgFromBase64.sign_eng,
       footer_th: imgFromBase64.myfoot_th,
       footer_eng: imgFromBase64.myfoot_eng
 
@@ -75,6 +76,7 @@ const certification_pdf = async (excel, form) => {
     }
   }
 
+  //const result = await createPDF(docDefinition);
   const result = pdfMake.createPdf(docDefinition)
   return result
 }
@@ -92,7 +94,7 @@ function signOption(form) {
             [
               // second column consists of paragraphs
               {
-                image: 'sign',
+                image: 'sign_th',
                 width: 250,
                 height: 80,
                 absolutePosition: { x: -200, y: 410 }
@@ -107,7 +109,7 @@ function signOption(form) {
       if (form.sign) { // TH 1 ลายเซ็น ผอ. เซ็น
         data = [
           {
-            image: 'sign',
+            image: 'sign_th',
             width: 250,
             height: 80,
             absolutePosition: { x: 70, y: 410 }
@@ -124,7 +126,7 @@ function signOption(form) {
         // console.log('ENG 2Sign Sign')
         data = [
           {
-            image: 'sign',
+            image: 'sign_eng',
             width: 250,
             height: 80,
             absolutePosition: { x: -200, y: 410 }
@@ -148,7 +150,7 @@ function signOption(form) {
         // console.log('ENG 1Sign Sign')
         data = [
           {
-            image: 'sign',
+            image: 'sign_eng',
             width: 250,
             height: 80,
             absolutePosition: { x: 60, y: 415 }
@@ -170,11 +172,32 @@ function signOption(form) {
 
 function run(excel, form) {
   let s = []
+  let valueX = 0
   let valueMargin = 15
 
-  let url = 'http://10.62.32.14:3300/' // for local
-  //let url = 'https://mb.mahidol.ac.th/mb_certificate/#/' // for server
- 
+  console.log(form.pj_code, form.no)
+
+  let url = 'http://10.62.38.51:3300/'
+  //let url = 'https://mb.mahidol.ac.th/mb_certificate/#/'
+
+  if (form.pj_code.length === 7) {
+    valueX = 613
+  }
+  else if (form.pj_code.length === 8) {
+    valueX = 608
+  }
+  else if (form.pj_code.length === 9) {
+    valueX = 603
+  }
+  else if (form.pj_code.length === 10) {
+    valueX = 599
+  }
+  else if (form.pj_code.length === 11) {
+    valueX = 596
+  }
+  else if (form.pj_code.length === 12) {
+    valueX = 590
+  }
   signOption(form)
   excel.forEach((e, index) => {
     s.push(
@@ -189,14 +212,12 @@ function run(excel, form) {
 
       {
         text: (excel.length === 1) ? 'CERTIFICATION NUMBER  ' + form.currentYear + '-' + form.pj_code + '-' + form.no.toString().padStart(4, '0') : 'CERTIFICATION NUMBER  ' + form.currentYear + '-' + form.pj_code + '-' + String(index + 1).padStart(4, '0'),
-        alignment: 'right',
         fontSize: 9,
         font: 'THSarabunNew',
-        absolutePosition: { y: 40 }
-        //absolutePosition: { x: valueX, y: 40 }
+        absolutePosition: { x: valueX, y: 40 }
       },
 
-      (excel.length === 1) ? { qr: `${url}` + 'show-pdf/path?' + `param1=${form.pj_code}` + '&' + `param2=${form.no}`, fit: 60, alignment: 'right', absolutePosition: { y: 60 } } : { qr: `${url}` + 'show-pdf/path?' +  `param1=${form.pj_code}` + '&' + `param2=${e.no}`, fit: 60, alignment: 'right', absolutePosition: { y: 60 } },
+      (excel.length === 1) ? { qr: `${url}` + 'show-pdf/path?' + `param1=${form.pj_code}` + '&' + `param2=${form.no}`, fit: 60, absolutePosition: { x: 760, y: 60 } } : { qr: `${url}` + 'show-pdf/path?' +  `param1=${form.pj_code}` + '&' + `param2=${e.no}`, fit: 60, absolutePosition: { x: 760, y: 60 } },
 
       (form.language === "Eng") ? { text: 'Institute of  Molecular Biosciences', color: '#1565C0', fontSize: 24, absolutePosition: { x: 50, y: 120 } } : {},
       (form.language === "Eng") ? { text: 'Mahidol University ', color: '#1565C0', fontSize: 24, absolutePosition: { x: 50, y: 150 } } : {},
@@ -210,7 +231,7 @@ function run(excel, form) {
       },
 
       (form.language === "TH" && form.pj_code.substring(0, 3) === 'PAR') ? {
-        text: 'เข้าอบรมเชิงปฏิบัติการเรื่อง ', alignment: 'center'
+        text: 'เข้าอบรมเชิงปฏิบัติการเรื่อง '
       } : (form.language === "TH" && form.pj_code.substring(0, 4) === 'ASST') ? { text: 'เป็นผู้ช่วยวิทยากรในการอบรมเชิงปฏิบัติการเรื่อง' } : {},
 
       (form.language === "Eng" && form.pj_code.substring(0, 3) === 'PAR') ? { text: 'participated in the practical training entitled', absolutePosition: { x: 50, y: 265 + valueMargin } } : (form.language === "Eng" && form.pj_code.substring(0, 4) === 'ASST') ? { text: 'is an assistant on practical training entitled', absolutePosition: { x: 50, y: 265 + valueMargin } } : {},
@@ -219,11 +240,10 @@ function run(excel, form) {
       //   text: 'Student Science Training Program' + ' ' + form.currentYear, color: '#1565C0', fontSize: 28, absolutePosition: { x: 50, y: 300 + valueMargin }, bold: true,
       // } : {},
 
-      //alignment: 'center'
       (form.language === "TH")
         ? { text: "“" + form.pj_name + "”", color: '#1565C0', fontSize: 24, absolutePosition: { x: 50, y: 250 + valueMargin } }
         : (form.language === "Eng" && (form.pj_code.substring(0, 3) === 'PAR' || form.pj_code.substring(0, 4) === 'ASST'))
-          ? { text: form.pj_name, color: '#1565C0', fontSize: 28, absolutePosition: { x: 50, y: 300 + valueMargin }, bold: true }
+          ? { text: 'Student Science Training Program' + ' ' + form.currentYear, color: '#1565C0', fontSize: 28, absolutePosition: { x: 50, y: 300 + valueMargin }, bold: true }
           : { text: "“" + form.pj_name + "”", color: '#1565C0', fontSize: 24, absolutePosition: { x: 50, y: 280 + valueMargin } },
 
 
