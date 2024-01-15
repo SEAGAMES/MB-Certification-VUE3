@@ -1,8 +1,8 @@
 <template >
   <v-row justify="center" class="fontSarabun">
-    <v-col cols="10" sm="10" md="8" lg="6">
+    <v-col cols="12" sm="10" md="8" lg="6">
       <v-form ref="form" lazy-validation>
-        <v-card ref="form" :height="270">
+        <v-card ref="form" :height="335">
           <v-card-text>
             <v-row
               ><v-col cols="12" md="6"
@@ -67,8 +67,8 @@
             <v-row class="mt-n8"
               ><v-col cols="6"
                 ><v-text-field
-                  label="วันที่"
-                  v-model="form.date_desc"
+                  label="รูปแบบการเข้าร่วม"
+                  v-model="form.participation_status"
                   @change="saveCreatePDF"
                   :rules="textRule"
                   required
@@ -80,6 +80,16 @@
                   @change="saveCreatePDF"
                   :rules="twoSignRule"
                   :disabled="!form.two_sign"
+                ></v-text-field></v-col
+            ></v-row>
+            <v-row class="mt-n8"
+              ><v-col cols="6"
+                ><v-text-field
+                  label="วันที่"
+                  v-model="form.date_desc"
+                  @change="saveCreatePDF"
+                  :rules="textRule"
+                  required
                 ></v-text-field></v-col
             ></v-row>
             <v-row>
@@ -175,6 +185,7 @@ export default {
       form: {
         pj_name: "",
         pj_code: "",
+        participation_status: "",
         date_desc: "",
         currentYear: "",
         add_name: "",
@@ -201,6 +212,7 @@ export default {
       loadingBtn: false,
     };
   },
+
   async mounted() {
     const dataFormLocal = JSON.parse(localStorage.getItem("create_pdf")) || {};
     this.form = { ...this.form, ...dataFormLocal }; //กำหนดค่าทุก property ของ dataFormLocal ลงใน this.form.
@@ -351,7 +363,10 @@ export default {
 
     // เก็บค่ากรณีผู้ใช้จะกดไปหน้า print ให้ส่งไปหน้า showpdf
     setData(data) {
-      this.$router.push({ path: '/show-pdf/path', query: { param1: data.pj_code } });
+      this.$router.push({
+        path: "/show-pdf/path",
+        query: { param1: data.pj_code },
+      });
 
       // แปลง 0 กับ 1 เป็น true กับ false
       // data.sign = data.sign === 1;
