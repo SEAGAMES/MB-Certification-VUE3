@@ -19,6 +19,7 @@ const createCertificate = async(data, excel) => {
 }
 
 const updateCertificate = async(data, listName) => {
+    console.log(data)
     const newData = []
     newData.push(data, listName)
     const result = await axios.post(`${apiUrl}update_certificate`, newData)

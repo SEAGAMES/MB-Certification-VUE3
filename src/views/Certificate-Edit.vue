@@ -3,7 +3,7 @@
     <v-row justify="center" class="fontSarabun">
       <v-col cols="12" sm="10" md="8" lg="6">
         <v-form ref="form" lazy-validation>
-          <v-card ref="form" height="260">
+          <v-card ref="form" height="335">
             <v-card-text>
               <v-row
                 ><v-col>
@@ -56,22 +56,30 @@
                     :rules="twoSignRule"
                     :disabled="!dataStorage.two_sign"
                   ></v-text-field
-                ></v-col>
-              </v-row>
-              <v-row class="mt-n8"
-                ><v-col
+                ></v-col> </v-row
+              ><v-row class="mt-n8"
+                ><v-col cols="6"
                   ><v-text-field
-                    label="วันที่"
-                    v-model="dataStorage.date_desc"
+                    label="รูปแบบการเข้าร่วม"
+                    v-model="dataStorage.participation_status"
                     :rules="textRule"
                     required
                   ></v-text-field></v-col
-                ><v-col
+                ><v-col cols="6"
                   ><v-text-field
                     label="ตำแหน่ง"
                     v-model="dataStorage.add_position"
                     :rules="twoSignRule"
                     :disabled="!dataStorage.two_sign"
+                  ></v-text-field></v-col
+              ></v-row>
+              <v-row class="mt-n8"
+                ><v-col cols="6"
+                  ><v-text-field
+                    label="วันที่"
+                    v-model="dataStorage.date_desc"
+                    :rules="textRule"
+                    required
                   ></v-text-field></v-col
               ></v-row>
               <v-row>
@@ -236,6 +244,7 @@ export default {
       if (
         !!this.dataStorage.pj_code &&
         !!this.dataStorage.pj_name &&
+        !!this.dataStorage.participation_status &&
         !!this.dataStorage.date_desc
       ) {
         if (
@@ -285,11 +294,11 @@ export default {
         this.dataDetail.data,
         this.dataStorage
       );
-      
+
       pdfDocGenerator.getDataUrl((dataUrl) => {
         this.base_64 = dataUrl;
         const iframe = this.$refs.pdfIframe;
-        console.log(this.$refs)
+        console.log(this.$refs);
         iframe.src = dataUrl;
 
         // กำหนดความกว้างและความสูงของ iframe ตรงนี้

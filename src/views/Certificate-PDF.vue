@@ -1,6 +1,6 @@
 <template >
   <v-row justify="center" class="fontSarabun">
-    <v-col cols="10" sm="10" md="8" lg="6">
+    <v-col cols="12" sm="10" md="8" lg="6">
       <v-form ref="form" lazy-validation>
         <v-card ref="form" :height="335">
           <v-card-text>
