@@ -12,6 +12,14 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 // pdfMake.vfs["timesbd.ttf"] = timeNewRoman.bold;
 import imgFromBase64 from "../assets/img/logo_mu";
 
+function isEnglish(char) {
+  const charCode = char.charCodeAt(0);
+  // ตรวจสอบว่ารหัส Unicode อยู่ในช่วงของตัวอักษรภาษาอังกฤษ
+  return (
+    (charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)
+  );
+}
+
 const certification_pdf = async (excel, form) => {
   // console.log('x : ',pdfMake.vfs)
   const docDefinition = {
@@ -179,7 +187,7 @@ function run(excel, form) {
   //console.log(form.pj_code, form.no);
 
   //let url = "http://10.62.38.51:3300/";
-  let url = 'https://mb.mahidol.ac.th/mb_certificate/#/'
+  let url = "https://mb.mahidol.ac.th/mb_certificate/#/";
 
   if (form.pj_code.length === 7) {
     valueX = 613;
@@ -278,18 +286,33 @@ function run(excel, form) {
             absolutePosition: { x: 50, y: 180 + valueMargin },
           },
 
-      form.language === "Eng"
+      // form.language === "Eng"
+      //   ? {
+      //       text: e.prefix + " " + e.name,
+      //       color: "#0D47A1",
+      //       fontSize: 34,
+      //       absolutePosition: { x: 50, y: 215 + valueMargin },
+      //       bold: true,
+      //     }
+      //   : {
+      //       text: e.prefix.trim() + e.name,
+      //       color: "#0D47A1",
+      //       fontSize: 28,
+      //     },
+      form.language === "TH"
         ? {
+            text: isEnglish(e.prefix.charAt(0))
+              ? e.prefix + " " + e.name
+              : e.prefix.trim() + e.name,
+            color: "#0D47A1",
+            fontSize: 28,
+          }
+        : {
             text: e.prefix + " " + e.name,
             color: "#0D47A1",
             fontSize: 34,
             absolutePosition: { x: 50, y: 215 + valueMargin },
             bold: true,
-          }
-        : {
-            text: e.prefix.trim() + e.name,
-            color: "#0D47A1",
-            fontSize: 28,
           },
 
       // (form.language === "TH" && form.pj_code.substring(0, 3) === 'PAR') ? {
@@ -323,21 +346,12 @@ function run(excel, form) {
             fontSize: 24,
             absolutePosition: { x: 50, y: 250 + valueMargin },
           }
-        : form.language === "Eng" &&
-          (form.pj_code.substring(0, 3) === "PAR" ||
-            form.pj_code.substring(0, 4) === "ASST")
-        ? {
-            text: "Student Science Training Program" + " " + form.currentYear,
+        : {
+            text: form.pj_name,
             color: "#1565C0",
             fontSize: 28,
             absolutePosition: { x: 50, y: 300 + valueMargin },
             bold: true,
-          }
-        : {
-            text: "“" + form.pj_name + "”",
-            color: "#1565C0",
-            fontSize: 24,
-            absolutePosition: { x: 50, y: 280 + valueMargin },
           },
 
       // (form.language === "TH") ? { text: "“" + form.pj_name + "”", color: '#1565C0', fontSize: 24 } : {},
