@@ -54,15 +54,16 @@
                   required
                 ></v-text-field
               ></v-col>
-              <v-col cols="12" md="6"
-                ><v-text-field
-                  label="ชื่อ"
-                  v-model="form.add_name"
-                  @change="saveCreatePDF"
+              <v-col cols="12" md="6">
+                <v-select
+                  label="ลายเซ็น"
+                  :items="signList"
+                  item-value="id"
+                  item-title="name"
                   :rules="twoSignRule"
                   :disabled="!form.two_sign"
-                ></v-text-field
-              ></v-col>
+                />
+              </v-col>
             </v-row>
             <v-row class="mt-n8"
               ><v-col cols="6"
@@ -75,21 +76,29 @@
                 ></v-text-field></v-col
               ><v-col cols="6"
                 ><v-text-field
-                  label="ตำแหน่ง"
-                  v-model="form.add_position"
+                  label="ชื่อ"
+                  v-model="form.add_name"
                   @change="saveCreatePDF"
                   :rules="twoSignRule"
                   :disabled="!form.two_sign"
                 ></v-text-field></v-col
             ></v-row>
             <v-row class="mt-n8"
-              ><v-col cols="6"
+              ><v-col
                 ><v-text-field
                   label="วันที่"
                   v-model="form.date_desc"
                   @change="saveCreatePDF"
                   :rules="textRule"
                   required
+                ></v-text-field></v-col
+              ><v-col
+                ><v-text-field
+                  label="ตำแหน่ง"
+                  v-model="form.add_position"
+                  @change="saveCreatePDF"
+                  :rules="twoSignRule"
+                  :disabled="!form.two_sign"
                 ></v-text-field></v-col
             ></v-row>
             <v-row>
@@ -204,6 +213,20 @@ export default {
         webkitRelativePath: "",
       },
 
+      signListSelect: 0,
+      signList: [
+        {
+          languge: "th",
+          name: "ศาสตราจารย์ ดร.นพ.นรัตถพล เจริญพันธุ์ (ผอ.)",
+          id: 1,
+        },
+        {
+          languge: "th",
+          name: "รองศาสตราจารย์ ดร. ม.ล.เสาวรส สวัสดิวัฒน์",
+          id: 3,
+        },
+      ],
+
       base_64: null,
       excel_array: null,
       preview: false,
@@ -288,6 +311,8 @@ export default {
       const ws = workbook.Sheets[workbook.SheetNames[0]];
       const result = XLSX.utils.sheet_to_json(ws, {});
       this.excel_array = result;
+
+      console.log(this.signListSelect)
     },
 
     async createCertificate() {

@@ -53,6 +53,7 @@ const certification_pdf = async (excel, form) => {
       logo: imgFromBase64.logo_mu,
       sign_th: imgFromBase64.sign_th,
       sign_eng: imgFromBase64.sign_eng,
+      sign_add_th_1: imgFromBase64.sign_add_th_1,
       footer_th: imgFromBase64.myfoot_th,
       footer_eng: imgFromBase64.myfoot_eng,
     },
