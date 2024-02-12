@@ -1,4 +1,10 @@
 <template >
+  <v-card>
+    <v-card-title>ข้อมูลที่ถูกเลือก</v-card-title>
+    <v-card-text>
+      <pre>{{ form.signListSelect }}</pre>
+    </v-card-text>
+  </v-card>
   <v-row justify="center" class="fontSarabun">
     <v-col cols="12" sm="10" md="8" lg="6">
       <v-form ref="form" lazy-validation>
@@ -56,10 +62,13 @@
               ></v-col>
               <v-col cols="12" md="6">
                 <v-select
+                  v-model="form.signListSelect"
+                  @change="test"
                   label="ลายเซ็น"
-                  :items="signList"
+                  :items="dataSign"
                   item-value="id"
-                  item-title="name"
+                  item-title="name_th"
+                  return-object
                   :rules="twoSignRule"
                   :disabled="!form.two_sign"
                 />
@@ -202,6 +211,7 @@ export default {
         language: "TH",
         sign: false,
         two_sign: false,
+        signListSelect: null,
       },
 
       file: {
@@ -213,19 +223,7 @@ export default {
         webkitRelativePath: "",
       },
 
-      signListSelect: 0,
-      signList: [
-        {
-          languge: "th",
-          name: "ศาสตราจารย์ ดร.นพ.นรัตถพล เจริญพันธุ์ (ผอ.)",
-          id: 1,
-        },
-        {
-          languge: "th",
-          name: "รองศาสตราจารย์ ดร. ม.ล.เสาวรส สวัสดิวัฒน์",
-          id: 3,
-        },
-      ],
+      dataSign: [],
 
       base_64: null,
       excel_array: null,
@@ -237,6 +235,7 @@ export default {
   },
 
   async mounted() {
+    this.dataSign = await apiCertificate.dataSign();
     const dataFormLocal = JSON.parse(localStorage.getItem("create_pdf")) || {};
     this.form = { ...this.form, ...dataFormLocal }; //กำหนดค่าทุก property ของ dataFormLocal ลงใน this.form.
   },
@@ -270,6 +269,10 @@ export default {
         showConfirmButton: false,
         timer: 2000,
       });
+    },
+
+    test() {
+      console.log('อิอิ')
     },
 
     saveCreatePDF() {
@@ -311,8 +314,6 @@ export default {
       const ws = workbook.Sheets[workbook.SheetNames[0]];
       const result = XLSX.utils.sheet_to_json(ws, {});
       this.excel_array = result;
-
-      console.log(this.signListSelect)
     },
 
     async createCertificate() {

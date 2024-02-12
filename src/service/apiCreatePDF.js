@@ -86,24 +86,39 @@ const certification_pdf = async (excel, form) => {
 
 function signOption(form) {
   let data = "";
+  // TH
   if (form.language === "TH") {
+    // 2 ลายเซ็น
     if (form.two_sign) {
+      // ผอ. เซ็น
       if (form.sign) {
         // console.log('TH 2Sign Sign')
         data = {
           columns: [
+            [
+              {
+                image: "sign_add_th_1",
+                width: 250,
+                height: 80,
+                absolutePosition: { x: -250, y: 395 },
+              },
+            ],
+            // ลายเซ็นที่ 2 (ผอ.)
             [
               // second column consists of paragraphs
               {
                 image: "sign_th",
                 width: 250,
                 height: 80,
-                absolutePosition: { x: -200, y: 410 },
+                absolutePosition: { x: 350, y: 400 },
               },
             ],
           ],
         };
-      } else {
+      }
+      // ผอ. ไม่เซ็น
+      else {
+        console.log("test what?");
         //TH 2 ลายเซ็น ผอ. ไม่เซ็น
         // console.log('TH 2Sign NoSign')
       }
@@ -385,25 +400,31 @@ function run(excel, form) {
       signOption(form),
 
       form.two_sign
-        ? {
+        ? // 2 ลายเซ็น
+          {
             columns: [
               [
+                // TH
                 form.language === "TH"
                   ? {
-                      text: "ศาสตราจารย์ ดร. นายแพทย์นรัตถพล เจริญพันธุ์",
+                    text: `${form.add_name}`,
+                      //text: "ศาสตราจารย์ ดร. นายแพทย์นรัตถพล เจริญพันธุ์",
                       fontSize: 11,
                       bolditalics: true,
                       absolutePosition: { x: -220, y: 495 },
                     }
+                    // ENG
                   : {
                       text: "Professor Narattaphol Charoenphandhu, M.D., Ph.D.",
                       fontSize: 13,
                       bolditalics: true,
                       absolutePosition: { x: -220, y: 495 },
                     },
+                    // ตำแหน่ง TH
                 form.language === "TH"
                   ? {
-                      text: "ผู้อำนวยการสถาบันชีววิทยาศาสตร์โมเลกุล",
+                    text: `${form.add_position}`,
+                      // text: "ผู้อำนวยการสถาบันชีววิทยาศาสตร์โมเลกุล",
                       fontSize: 11,
                       bolditalics: true,
                       absolutePosition: { x: -220, y: 520 },
@@ -415,15 +436,19 @@ function run(excel, form) {
                       absolutePosition: { x: -220, y: 520 },
                     },
               ],
+
+              // ชื่อ ตำแหน่งคนที่เพิ่ม
               [
                 {
-                  text: `${form.add_name}`,
+                  // text: `${form.add_name}`,
+                  text: "ศาสตราจารย์ ดร. นายแพทย์นรัตถพล เจริญพันธุ์",
                   fontSize: 11,
                   bolditalics: true,
                   absolutePosition: { x: 330, y: 495 },
                 },
                 {
-                  text: `${form.add_position}`,
+                  // text: `${form.add_position}`,
+                  text: "ผู้อำนวยการสถาบันชีววิทยาศาสตร์โมเลกุล",
                   fontSize: 11,
                   bolditalics: true,
                   absolutePosition: { x: 335, y: 520 },
@@ -431,7 +456,8 @@ function run(excel, form) {
               ],
             ],
           }
-        : {
+        : // 1 ลายเซ็น
+          {
             columns: [
               [
                 form.language === "TH"
