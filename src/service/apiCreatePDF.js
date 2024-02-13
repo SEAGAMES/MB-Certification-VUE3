@@ -97,7 +97,7 @@ function signOption(form) {
           columns: [
             [
               {
-                image: "sign_add_th_1",
+                image: form.base64_sign_th,
                 width: 250,
                 height: 80,
                 absolutePosition: { x: -250, y: 395 },
@@ -118,9 +118,22 @@ function signOption(form) {
       }
       // ผอ. ไม่เซ็น
       else {
-        console.log("test what?");
         //TH 2 ลายเซ็น ผอ. ไม่เซ็น
-        // console.log('TH 2Sign NoSign')
+        // add เพิ่มเซ็น
+        if(form.base64_sign_th) {
+          data = {
+            columns: [
+              [
+                {
+                  image: form.base64_sign_th,
+                  width: 250,
+                  height: 80,
+                  absolutePosition: { x: -250, y: 395 },
+                },
+              ],
+            ],
+          };
+        }
       }
     } else {
       // 1 ลายเซ็น
@@ -199,6 +212,8 @@ function run(excel, form) {
   let s = [];
   let valueX = 0;
   let valueMargin = 15;
+
+  // console.log(form.signListSelect)
 
   //console.log(form.pj_code, form.no);
 
@@ -408,7 +423,6 @@ function run(excel, form) {
                 form.language === "TH"
                   ? {
                     text: `${form.add_name}`,
-                      //text: "ศาสตราจารย์ ดร. นายแพทย์นรัตถพล เจริญพันธุ์",
                       fontSize: 11,
                       bolditalics: true,
                       absolutePosition: { x: -220, y: 495 },
@@ -424,7 +438,6 @@ function run(excel, form) {
                 form.language === "TH"
                   ? {
                     text: `${form.add_position}`,
-                      // text: "ผู้อำนวยการสถาบันชีววิทยาศาสตร์โมเลกุล",
                       fontSize: 11,
                       bolditalics: true,
                       absolutePosition: { x: -220, y: 520 },
