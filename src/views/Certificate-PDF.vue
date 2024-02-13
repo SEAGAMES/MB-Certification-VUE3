@@ -1,10 +1,4 @@
 <template >
-  <v-card>
-    <v-card-title>ข้อมูลที่ถูกเลือก</v-card-title>
-    <v-card-text>
-      <pre>{{ form.signListSelect }}</pre>
-    </v-card-text>
-  </v-card>
   <v-row justify="center" class="fontSarabun">
     <v-col cols="12" sm="10" md="8" lg="6">
       <v-form ref="form" lazy-validation>
@@ -63,7 +57,6 @@
               <v-col cols="12" md="6">
                 <v-select
                   v-model="form.signListSelect"
-                  @change="test"
                   label="ลายเซ็น"
                   :items="dataSign"
                   item-value="id"
@@ -271,10 +264,6 @@ export default {
       });
     },
 
-    test() {
-      console.log('อิอิ')
-    },
-
     saveCreatePDF() {
       localStorage.setItem("create_pdf", JSON.stringify(this.form));
     },
@@ -424,6 +413,21 @@ export default {
         }
       },
       immediate: true, // เพื่อให้ทำการเช็คค่าเมื่อ component ถูก mount
+    },
+
+    "form.signListSelect": {
+      handler(newValue) {
+        // ตรวจสอบว่า form.signListSelect มีค่าหรือไม่
+        if (newValue) {
+            // ทำการปรับค่า form.add_name และ form.add_position ตามที่คุณต้องการ
+            // this.form.add_name = this.signListSelect.name_th; // แทน someProperty ด้วย property ที่คุณต้องการใช้
+            // this.form.add_position = "test 2"; // แทน anotherProperty ด้วย property ที่คุณต้องการใช้
+
+            console.log(this.form.signListSelect)
+            this.form.add_name = this.form.signListSelect.name_th    
+            this.form.add_position = this.form.signListSelect.position_th       }
+      },
+      immediate: true, // ให้ทำงานทันทีเมื่อ component ถูก mount
     },
   },
 };
