@@ -95,14 +95,16 @@ function signOption(form) {
         // console.log('TH 2Sign Sign')
         data = {
           columns: [
-            [
-              {
-                image: form.base64_sign_th,
-                width: 250,
-                height: 80,
-                absolutePosition: { x: -250, y: 395 },
-              },
-            ],
+            form.base64_sign_th
+              ? [
+                  {
+                    image: form.base64_sign_th,
+                    width: 250,
+                    height: 80,
+                    absolutePosition: { x: -250, y: 395 },
+                  },
+                ]
+              : [],
             // ลายเซ็นที่ 2 (ผอ.)
             [
               // second column consists of paragraphs
@@ -120,7 +122,7 @@ function signOption(form) {
       else {
         //TH 2 ลายเซ็น ผอ. ไม่เซ็น
         // add เพิ่มเซ็น
-        if(form.base64_sign_th) {
+        if (form.base64_sign_th) {
           data = {
             columns: [
               [
@@ -159,11 +161,21 @@ function signOption(form) {
       if (form.sign) {
         // console.log('ENG 2Sign Sign')
         data = [
+          form.base64_sign_eng
+            ? {
+                image: form.base64_sign_eng,
+                width: 250,
+                height: 80,
+                //absolutePosition: { x: -200, y: 410 },
+                absolutePosition: { x: -250, y: 395 },
+              }
+            : {},
           {
             image: "sign_eng",
             width: 250,
             height: 80,
-            absolutePosition: { x: -200, y: 410 },
+            //absolutePosition: { x: -200, y: 410 },
+            absolutePosition: { x: 350, y: 400 },
           },
         ];
       } else {
@@ -346,10 +358,6 @@ function run(excel, form) {
             bold: true,
           },
 
-      // (form.language === "TH" && form.pj_code.substring(0, 3) === 'PAR') ? {
-      //   text: 'เข้าอบรมเชิงปฏิบัติการเรื่อง '
-      // } : (form.language === "TH" && form.pj_code.substring(0, 4) === 'ASST') ? { text: 'เป็นผู้ช่วยวิทยากรในการอบรมเชิงปฏิบัติการเรื่อง' } : {},
-
       form.language === "Eng"
         ? {
             text: form.participation_status,
@@ -357,18 +365,6 @@ function run(excel, form) {
             absolutePosition: { x: 50, y: 265 + valueMargin },
           }
         : { text: form.participation_status, alignment: "center" },
-
-      // form.language === "Eng" && form.pj_code.substring(0, 3) === "PAR"
-      //   ? {
-      //       text: "participated in the practical training entitled",
-      //       absolutePosition: { x: 50, y: 265 + valueMargin },
-      //     }
-      //   : form.language === "Eng" && form.pj_code.substring(0, 4) === "ASST"
-      //   ? {
-      //       text: "is an assistant on practical training entitled",
-      //       absolutePosition: { x: 50, y: 265 + valueMargin },
-      //     }
-      //   : {},
 
       form.language === "TH"
         ? {
@@ -385,7 +381,6 @@ function run(excel, form) {
             bold: true,
           },
 
-      // (form.language === "TH") ? { text: "“" + form.pj_name + "”", color: '#1565C0', fontSize: 24 } : {},
       { text: form.date },
 
       form.language === "TH"
@@ -419,50 +414,46 @@ function run(excel, form) {
           {
             columns: [
               [
-                // TH
-                form.language === "TH"
+                // คนที่เพิ่ม
+                // TH เเละ ENG
+                form.add_name
                   ? {
-                    text: `${form.add_name}`,
-                      fontSize: 11,
+                      text: `${form.add_name}`,
+                      fontSize: form.language === "TH" ? 11 : 13,
                       bolditalics: true,
                       absolutePosition: { x: -220, y: 495 },
                     }
-                    // ENG
-                  : {
-                      text: "Professor Narattaphol Charoenphandhu, M.D., Ph.D.",
-                      fontSize: 13,
-                      bolditalics: true,
-                      absolutePosition: { x: -220, y: 495 },
-                    },
-                    // ตำแหน่ง TH
-                form.language === "TH"
+                  : "",
+
+                // ตำแหน่ง TH เเละ ENG
+                form.add_position
                   ? {
-                    text: `${form.add_position}`,
-                      fontSize: 11,
+                      text: `${form.add_position}`,
+                      fontSize: form.language === "TH" ? 11 : 13,
                       bolditalics: true,
                       absolutePosition: { x: -220, y: 520 },
                     }
-                  : {
-                      text: "Director",
-                      fontSize: 13,
-                      bolditalics: true,
-                      absolutePosition: { x: -220, y: 520 },
-                    },
+                  : "",
               ],
 
-              // ชื่อ ตำแหน่งคนที่เพิ่ม
+              // ผอ. ชื่อ
               [
                 {
-                  // text: `${form.add_name}`,
-                  text: "ศาสตราจารย์ ดร. นายแพทย์นรัตถพล เจริญพันธุ์",
-                  fontSize: 11,
+                  text:
+                    form.language === "TH"
+                      ? "ศาสตราจารย์ ดร. นายแพทย์นรัตถพล เจริญพันธุ์"
+                      : "Professor Narattaphol Charoenphandhu, M.D., Ph.D.",
+                  fontSize: 13,
                   bolditalics: true,
                   absolutePosition: { x: 330, y: 495 },
                 },
+                // ผอ. ตำแหน่ง
                 {
-                  // text: `${form.add_position}`,
-                  text: "ผู้อำนวยการสถาบันชีววิทยาศาสตร์โมเลกุล",
-                  fontSize: 11,
+                  text:
+                    form.language === "TH"
+                      ? "ผู้อำนวยการสถาบันชีววิทยาศาสตร์โมเลกุล"
+                      : "Director",
+                  fontSize: 13,
                   bolditalics: true,
                   absolutePosition: { x: 335, y: 520 },
                 },

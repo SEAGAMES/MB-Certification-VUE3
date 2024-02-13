@@ -471,6 +471,8 @@ export default {
           this.form.add_name = null;
           this.form.add_position = null;
           this.form.sign_id = null;
+          this.form.base64_sign_th = null;
+          this.base64_sign_eng = null
         }
       },
       immediate: true, // เพื่อให้ทำการเช็คค่าเมื่อ component ถูก mount
