@@ -93,6 +93,7 @@ export default {
       dataDetail: [],
       base_64: null,
       preview: false,
+      dataSign: [],
       headers: [
         {
           align: "center",
@@ -111,6 +112,9 @@ export default {
 
   async mounted() {
     await this.getDataCertificateMaster();
+    console.log(this.dataLoad)
+    // this.dataSign = await apiCertificate.dataSign()
+    // console.log(this.dataSign)
   },
 
   methods: {
@@ -135,6 +139,7 @@ export default {
     },
 
     async createPDFShow() {
+      console.log(this.dataStorage)
       const pdfDocGenerator = await createPDF.certification_pdf(
         this.dataDetail.data,
         this.dataStorage

@@ -65,7 +65,7 @@
             </v-col>
             <v-col cols="12" md="5">
               <v-select
-                v-model="form.sign_id"
+                v-model="form.sign_add_id"
                 label="เลือกลายเซ็นที่ 2"
                 :items="dataSign"
                 item-value="id"
@@ -125,7 +125,7 @@
             <v-btn
               v-if="save_to_db"
               @change="saveCreatePDF"
-              @click="createCertificate"
+              @click="create_CertificatePDF"
               class="mt-n7 mx-2"
               size="small"
               color="orange"
@@ -213,14 +213,16 @@ export default {
         currentYear: "",
         add_name: "",
         add_position: "",
-        base64_sign_th: "",
-        base64_sign_eng: "",
+        base64_sign_add_th: "",
+        base64_sign_add_eng: "",
         language: "TH",
         sign: false,
         two_sign: false,
         selectSign: false,
-        sign_id: null,
+        sign_add_id: null,
       },
+
+      newForm: {},
 
       file: {
         name: "",
@@ -320,8 +322,7 @@ export default {
       this.excel_array = result;
     },
 
-    async createCertificate() {
-      console.log(this.form);
+    async create_CertificatePDF() {
       const currentDate = new Date();
       this.form.currentYear = currentDate.getFullYear();
 
@@ -371,8 +372,16 @@ export default {
         // console.log(this.form);
         // กรณีไม่ซ้ำ
         if (result.data.msg === "ok") {
+
+          // เอาค่า base64_sign_add_th, base64_sign_eng ออกก่อนส่ง เพื่อลดขนาดข้อมูล
+          this.newForm = {
+            ...this.form,
+            base64_sign_add_th: undefined,
+            base64_sign_add_eng: undefined,
+          };
+
           const resultInsert = await apiCertificate.createCertificate(
-            this.form,
+            this.newForm,
             this.excel_array
           );
           // กรณี insert master เเละ detail สำเร็จ
@@ -419,17 +428,17 @@ export default {
 
   watch: {
     excel_array() {
-      this.createCertificate();
+      this.create_CertificatePDF();
     },
 
     "form.language": {
       handler() {
         const objectWithId = this.dataSign.find(
-          (obj) => obj.id === this.form.sign_id
+          (obj) => obj.id === this.form.sign_add_id
         );
         if (
           this.form.selectSign === true &&
-          this.form.sign_id >= 1 &&
+          this.form.sign_add_id >= 1 &&
           objectWithId
         ) {
           this.form.add_name =
@@ -440,9 +449,8 @@ export default {
             this.form.language === "TH"
               ? objectWithId.position_th
               : objectWithId.position_eng;
-          this.form.base64_sign_th = objectWithId.base64_sign_th;
-          this.form.base64_sign_eng = objectWithId.base64_sign_eng;
-          console.log(this.form)
+          this.form.base64_sign_add_th = objectWithId.base64_sign_add_th;
+          this.form.base64_sign_add_eng = objectWithId.base64_sign_add_eng;
           this.saveCreatePDF();
         }
       },
@@ -455,10 +463,10 @@ export default {
         if (!newValue) {
           this.form.add_name = null;
           this.form.add_position = null;
-          this.form.sign_id = null;
+          this.form.sign_add_id = null;
           this.form.selectSign = false;
-          this.form.base64_sign_th = null;
-          this.form.base64_sign_eng = null;
+          this.form.base64_sign_add_th = null;
+          this.form.base64_sign_add_eng = null;
         }
       },
       immediate: true, // เพื่อให้ทำการเช็คค่าเมื่อ component ถูก mount
@@ -470,21 +478,21 @@ export default {
         if (!newValue) {
           this.form.add_name = null;
           this.form.add_position = null;
-          this.form.sign_id = null;
-          this.form.base64_sign_th = null;
-          this.base64_sign_eng = null
+          this.form.sign_add_id = null;
+          this.form.base64_sign_add_th = null;
+          this.base64_sign_add_eng = null;
         }
       },
       immediate: true, // เพื่อให้ทำการเช็คค่าเมื่อ component ถูก mount
     },
 
     // v-select
-    "form.sign_id": {
+    "form.sign_add_id": {
       handler(newValue) {
-        // ตรวจสอบว่า form.sign_id มีค่าหรือไม่
+        // ตรวจสอบว่า form.sign_add_id มีค่าหรือไม่
         if (newValue) {
           const objectWithId = this.dataSign.find(
-            (obj) => obj.id === this.form.sign_id
+            (obj) => obj.id === this.form.sign_add_id
           );
 
           if (objectWithId) {
@@ -496,8 +504,8 @@ export default {
               this.form.language === "TH"
                 ? objectWithId.position_th
                 : objectWithId.position_eng;
-            this.form.base64_sign_th = objectWithId.base64_sign_th;
-            this.form.base64_sign_eng = objectWithId.base64_sign_eng;
+            this.form.base64_sign_add_th = objectWithId.base64_sign_th; // เอาใน db มาใส่ในตัวแปรใหม่
+            this.form.base64_sign_add_eng = objectWithId.base64_sign_eng;
             this.saveCreatePDF();
           }
         }
