@@ -95,10 +95,10 @@ function signOption(form) {
         // console.log('TH 2Sign Sign')
         data = {
           columns: [
-            form.base64_sign_th
+            form.base64_sign_add_th
               ? [
                   {
-                    image: form.base64_sign_th,
+                    image: form.base64_sign_add_th,
                     width: 250,
                     height: 80,
                     absolutePosition: { x: -250, y: 395 },
@@ -122,12 +122,12 @@ function signOption(form) {
       else {
         //TH 2 ลายเซ็น ผอ. ไม่เซ็น
         // add เพิ่มเซ็น
-        if (form.base64_sign_th) {
+        if (form.base64_sign_add_th) {
           data = {
             columns: [
               [
                 {
-                  image: form.base64_sign_th,
+                  image: form.base64_sign_add_th,
                   width: 250,
                   height: 80,
                   absolutePosition: { x: -250, y: 395 },
@@ -161,9 +161,9 @@ function signOption(form) {
       if (form.sign) {
         // console.log('ENG 2Sign Sign')
         data = [
-          form.base64_sign_eng
+          form.base64_sign_add_eng
             ? {
-                image: form.base64_sign_eng,
+                image: form.base64_sign_add_eng,
                 width: 250,
                 height: 80,
                 //absolutePosition: { x: -200, y: 410 },
