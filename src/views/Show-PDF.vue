@@ -16,9 +16,12 @@ export default {
     return {
       preview: false,
       base_64: "",
+      dataLoad: [],
+      dataSign: [],
     };
   },
   async mounted() {
+    this.dataSign = await apiCertificate.dataSign();
     // console.log(this.$route.query.param1, this.$route.query.param2)
     let name = [];
     if (this.$route.query.param2) {
@@ -29,9 +32,25 @@ export default {
       if (data.msg === "not found") {
         this.showAlert("error", "Certificate Not Found !!");
       } else {
-        data.data[0].sign = true
+        data.data[0].sign = true;
         name.push({ prefix: data.data[0].prefix, name: data.data[0].name });
-        await this.createPDF(data.data[0], name);
+        // await this.createPDF(data.data[0], name);
+        // this.preview = true;
+
+        this.dataLoad = data.data[0];
+
+        if (this.dataLoad.language === "TH") {
+          // console.log(this.dataLoad);
+          this.dataSign.forEach((obj) => {
+            if (obj.id === this.dataLoad.sign_add_id) {
+              this.dataLoad.add_name = obj.name_th;
+              this.dataLoad.add_position = obj.position_th;
+              this.dataLoad.base64_sign_add_th = obj.base64_sign_th;
+            }
+          });
+        }
+
+        await this.createPDF(this.dataLoad, name);
         this.preview = true;
       }
     } else {

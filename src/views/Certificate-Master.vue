@@ -117,24 +117,26 @@ export default {
 
     this.dataLoad.data.forEach((obj) => {
       if (obj.language === "TH") {
-        console.log(obj)
+        // console.log(obj)
         this.dataSign.forEach((obj_sign) => {
           if (obj_sign.id === obj.sign_add_id) {
-            //console.log(obj_sign);
-            obj.add_name = obj_sign.name_th
-            obj.add_position = obj_sign.position_th
-            obj.base64_sign_add_th = obj_sign.base64_sign_th
-            //console.log(obj)
+            obj.add_name = obj_sign.name_th;
+            obj.add_position = obj_sign.position_th;
+            obj.base64_sign_add_th = obj_sign.base64_sign_th;
+          }
+        });
+      } else {
+        this.dataSign.forEach((obj_sign) => {
+          if (obj_sign.id === obj.sign_add_id) {
+            obj.add_name = obj_sign.name_eng;
+            obj.add_position = obj_sign.position_eng;
+            obj.base64_sign_add_eng = obj_sign.base64_sign_eng;
           }
         });
       }
+      console.log(this.dataLoad)
     });
 
-    // if(this.form.language === 'TH'){
-    //   console.log('TH')
-    // }
-    // this.dataSign = await apiCertificate.dataSign()
-    // console.log(this.dataSign)
   },
 
   methods: {
@@ -159,7 +161,7 @@ export default {
     },
 
     async createPDFShow() {
-      console.log(this.dataStorage);
+      // console.log(this.dataStorage);
       const pdfDocGenerator = await createPDF.certification_pdf(
         this.dataDetail.data,
         this.dataStorage
