@@ -70,7 +70,7 @@
                 :items="dataSign"
                 item-value="id"
                 :item-title="form.language === 'TH' ? 'name_th' : 'name_eng'"
-                :rules="twoSignRule"
+                :rules="selectSignRule"
                 :disabled="!form.selectSign"
               />
             </v-col>
@@ -203,6 +203,10 @@ export default {
       ],
       twoSignRule: [
         (v) => (this.form.two_sign ? !!v || "กรุณาใส่ข้อความ" : true),
+      ],
+
+      selectSignRule: [
+        (v) => (this.form.selectSign ? !!v || "กรุณาเลือก" : true),
       ],
 
       form: {
