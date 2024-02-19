@@ -248,6 +248,7 @@ export default {
     this.dataSign = await apiCertificate.dataSign();
     const dataFormLocal = JSON.parse(localStorage.getItem("create_pdf")) || {};
     this.form = { ...this.form, ...dataFormLocal }; //กำหนดค่าทุก property ของ dataFormLocal ลงใน this.form.
+
   },
   methods: {
     //บันทักข้อมูลสำเร็จ ต้องการไปยังหน้า Detail เพื่อ Print หรือไม่
@@ -436,10 +437,11 @@ export default {
         const objectWithId = this.dataSign.find(
           (obj) => obj.id === this.form.sign_add_id
         );
+
+        console.log(objectWithId)
         if (
           this.form.selectSign === true &&
-          this.form.sign_add_id >= 1 &&
-          objectWithId
+          this.form.sign_add_id >= 1 
         ) {
           this.form.add_name =
             this.form.language === "TH"
@@ -449,8 +451,8 @@ export default {
             this.form.language === "TH"
               ? objectWithId.position_th
               : objectWithId.position_eng;
-          this.form.base64_sign_add_th = objectWithId.base64_sign_add_th;
-          this.form.base64_sign_add_eng = objectWithId.base64_sign_add_eng;
+          this.form.base64_sign_add_th = objectWithId.base64_sign_th;
+          this.form.base64_sign_add_eng = objectWithId.base64_sign_eng;
           this.saveCreatePDF();
         }
       },

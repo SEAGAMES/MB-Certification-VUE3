@@ -443,7 +443,7 @@ function run(excel, form) {
                     form.language === "TH"
                       ? "ศาสตราจารย์ ดร. นายแพทย์นรัตถพล เจริญพันธุ์"
                       : "Professor Narattaphol Charoenphandhu, M.D., Ph.D.",
-                  fontSize: 11,
+                  fontSize: form.language === "TH" ? 11 : 13,
                   bolditalics: true,
                   absolutePosition: { x: 330, y: 495 },
                 },
@@ -453,7 +453,7 @@ function run(excel, form) {
                     form.language === "TH"
                       ? "ผู้อำนวยการสถาบันชีววิทยาศาสตร์โมเลกุล"
                       : "Director",
-                  fontSize: 11,
+                  fontSize: form.language === "TH" ? 11 : 13,
                   bolditalics: true,
                   absolutePosition: { x: 335, y: 520 },
                 },
