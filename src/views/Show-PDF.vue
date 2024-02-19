@@ -24,41 +24,51 @@ export default {
     this.dataSign = await apiCertificate.dataSign();
     // console.log(this.$route.query.param1, this.$route.query.param2)
     let name = [];
-    if (this.$route.query.param2) {
+    if (this.$route.query.param2) { // ผ่านการย่อ code
       const { data } = await apiCertificate.getDataQrCode(
         this.$route.query.param1,
         this.$route.query.param2
       );
+
       if (data.msg === "not found") {
         this.showAlert("error", "Certificate Not Found !!");
       } else {
         data.data[0].sign = true;
-        name.push({ prefix: data.data[0].prefix, name: data.data[0].name });
-        // await this.createPDF(data.data[0], name);
-        // this.preview = true;
-
         this.dataLoad = data.data[0];
+        name.push({ prefix: this.dataLoad.prefix, name: this.dataLoad.name });
 
-        if (this.dataLoad.language === "TH") {
-          // console.log(this.dataLoad);
-          this.dataSign.forEach((obj) => {
-            if (obj.id === this.dataLoad.sign_add_id) {
-              this.dataLoad.add_name = obj.name_th;
-              this.dataLoad.add_position = obj.position_th;
-              this.dataLoad.base64_sign_add_th = obj.base64_sign_th;
-            }
-          });
-        }
+        const languageKey = this.dataLoad.language === "TH" ? "th" : "eng";
+
+        this.dataSign.forEach((obj) => {
+          if (obj.id === this.dataLoad.sign_add_id) {
+            this.dataLoad.add_name = obj[`name_${languageKey}`];
+            this.dataLoad.add_position = obj[`position_${languageKey}`];
+            this.dataLoad[`base64_sign_add_${languageKey}`] =
+              obj[`base64_sign_${languageKey}`];
+          }
+        });
 
         await this.createPDF(this.dataLoad, name);
         this.preview = true;
       }
     } else {
+      // code หลังจากสร้างเสร็จเเล้วกดมาดูทันที // ผ่านการย่อ code
       const { data } = await apiCertificate.dataInPjcode(
         this.$route.query.param1
       );
-      name = data.data;
-      await this.createPDF(data.data[0], name);
+      this.dataLoad = data.data;
+
+      const index_id = this.dataLoad[0].sign_add_id - 1;
+      const languageKey = this.dataLoad[0].language === "TH" ? "th" : "eng";
+
+      this.dataLoad.forEach((obj) => {
+        obj.add_name = this.dataSign[index_id][`name_${languageKey}`];
+        obj.add_position = this.dataSign[index_id][`position_${languageKey}`];
+        obj[`base64_sign_add_${languageKey}`] =
+          this.dataSign[index_id][`base64_sign_${languageKey}`];
+      });
+
+      await this.createPDF(this.dataLoad[0], this.dataLoad);
       this.preview = true;
     }
   },

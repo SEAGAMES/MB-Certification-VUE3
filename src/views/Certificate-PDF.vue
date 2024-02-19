@@ -264,7 +264,7 @@ export default {
       }).then((result) => {
         if (result.isConfirmed) {
           this.setData(this.form);
-          this.clearCreatePDF();
+          // this.clearCreatePDF();
         } else {
           this.clearCreatePDF();
           this.preview = false;
@@ -377,8 +377,6 @@ export default {
           // เอาค่า base64_sign_add_th, base64_sign_eng ออกก่อนส่ง เพื่อลดขนาดข้อมูล
           this.newForm = {
             ...this.form,
-            base64_sign_add_th: undefined,
-            base64_sign_add_eng: undefined,
           };
 
           const resultInsert = await apiCertificate.createCertificate(
@@ -437,8 +435,6 @@ export default {
         const objectWithId = this.dataSign.find(
           (obj) => obj.id === this.form.sign_add_id
         );
-
-        console.log(objectWithId)
         if (
           this.form.selectSign === true &&
           this.form.sign_add_id >= 1 
