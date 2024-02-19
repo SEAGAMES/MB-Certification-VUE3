@@ -101,7 +101,7 @@ function signOption(form) {
                     image: form.base64_sign_add_th,
                     width: 250,
                     height: 80,
-                    absolutePosition: { x: -250, y: 395 },
+                    absolutePosition: { x: -215, y: 395 },
                   },
                 ]
               : [],
@@ -112,7 +112,7 @@ function signOption(form) {
                 image: "sign_th",
                 width: 250,
                 height: 80,
-                absolutePosition: { x: 350, y: 400 },
+                absolutePosition: { x: 350, y: 395 },
               },
             ],
           ],

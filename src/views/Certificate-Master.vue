@@ -33,11 +33,11 @@
                 <v-icon @click="printPDF(item)" style="color: rgb(55, 136, 176)"
                   >mdi-printer</v-icon
                 >
-                <v-icon
+                <!-- <v-icon
                   @click="editCertificate(item)"
                   style="color: rgb(243, 156, 18)"
                   >mdi-pencil</v-icon
-                >
+                > -->
                 <v-icon
                   @click="deleteCertificate(item.pj_code)"
                   style="color: rgb(255, 0, 0)"
@@ -212,6 +212,7 @@ export default {
     },
 
     editCertificate(data) {
+      
       // แปลง 0 กับ 1 เป็น true กับ false
       data.sign = data.sign === 1;
       data.two_sign = data.two_sign === 1;
