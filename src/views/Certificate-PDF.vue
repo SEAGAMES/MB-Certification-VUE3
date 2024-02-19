@@ -59,7 +59,6 @@
                 @change="saveCreatePDF"
                 color="indigo"
                 hide-details
-                :rules="twoSignRule"
                 :disabled="!form.two_sign"
               ></v-checkbox>
             </v-col>
