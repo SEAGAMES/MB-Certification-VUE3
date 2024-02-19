@@ -112,31 +112,6 @@ export default {
 
   async mounted() {
     await this.getDataCertificateMaster();
-
-    this.dataSign = await apiCertificate.dataSign();
-
-    this.dataLoad.data.forEach((obj) => {
-      if (obj.language === "TH") {
-        // console.log(obj)
-        this.dataSign.forEach((obj_sign) => {
-          if (obj_sign.id === obj.sign_add_id) {
-            obj.add_name = obj_sign.name_th;
-            obj.add_position = obj_sign.position_th;
-            obj.base64_sign_add_th = obj_sign.base64_sign_th;
-          }
-        });
-      } else {
-        this.dataSign.forEach((obj_sign) => {
-          if (obj_sign.id === obj.sign_add_id) {
-            obj.add_name = obj_sign.name_eng;
-            obj.add_position = obj_sign.position_eng;
-            obj.base64_sign_add_eng = obj_sign.base64_sign_eng;
-          }
-        });
-      }
-      console.log(this.dataLoad)
-    });
-
   },
 
   methods: {
@@ -211,6 +186,29 @@ export default {
       //console.log(data)
       this.dataLoad = data.data;
       // console.log(this.dataLoad.data);
+
+      this.dataSign = await apiCertificate.dataSign();
+
+      this.dataLoad.data.forEach((obj) => {
+        if (obj.language === "TH") {
+          // console.log(obj)
+          this.dataSign.forEach((obj_sign) => {
+            if (obj_sign.id === obj.sign_add_id) {
+              obj.add_name = obj_sign.name_th;
+              obj.add_position = obj_sign.position_th;
+              obj.base64_sign_add_th = obj_sign.base64_sign_th;
+            }
+          });
+        } else {
+          this.dataSign.forEach((obj_sign) => {
+            if (obj_sign.id === obj.sign_add_id) {
+              obj.add_name = obj_sign.name_eng;
+              obj.add_position = obj_sign.position_eng;
+              obj.base64_sign_add_eng = obj_sign.base64_sign_eng;
+            }
+          });
+        }
+      });
     },
 
     editCertificate(data) {
