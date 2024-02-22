@@ -57,9 +57,14 @@
                     :rules="twoSignRule"
                   ></v-checkbox>
                 </v-col>
-                <v-col>
-                  <v-text-field></v-text-field>
-                </v-col>
+                <!-- <v-col>
+                  <v-select
+                    label="เลือกลายเซ็นที่ 2"
+                    :items="dataSign"
+                    item-value="id"
+                    :item-title="name_th"
+                  ></v-select>
+                </v-col> -->
                 <!-- <v-col
                   ><v-text-field
                     label="ชื่อ"
@@ -224,6 +229,7 @@ export default {
 
       selectPopupShow: null,
       dataStorage: [],
+      dataSign: [],
       indexEdit: null,
       mangeName: {
         dialog: false,
@@ -236,7 +242,9 @@ export default {
       ],
     };
   },
-  mounted() {
+  async mounted() {
+    this.dataSign = await apiCertificate.dataSign();
+
     // ดึงข้อมูลจาก Local Storage
     const certificate_data = localStorage.getItem("certificate_data");
 
@@ -245,6 +253,7 @@ export default {
 
     this.mangeName.pj_code = this.dataStorage.pj_code;
     this.getDataCertificateDetail();
+
   },
   methods: {
     handleInput() {
@@ -320,7 +329,6 @@ export default {
       pdfDocGenerator.getDataUrl((dataUrl) => {
         this.base_64 = dataUrl;
         const iframe = this.$refs.pdfIframe;
-        console.log(this.$refs);
         iframe.src = dataUrl;
 
         // กำหนดความกว้างและความสูงของ iframe ตรงนี้
@@ -336,8 +344,7 @@ export default {
       );
       this.dataDetail = data.data;
 
-      console.log(this.dataDetail);
-    },
+   },
 
     showAlert(icon, title) {
       Swal.fire({
