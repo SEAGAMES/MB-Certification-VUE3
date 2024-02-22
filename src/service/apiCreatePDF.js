@@ -257,9 +257,9 @@ function run(excel, form) {
     const char = form.pj_name.charAt(i);
 
     // เช็คว่า char เป็นตัวอักษรพิเศษหรือไม่
-    if (!(/^[A-Za-z0-9ก-๙\s]*$/.test(char))) {
+    if (!/^[A-Za-z0-9ก-๙\s]*$/.test(char)) {
       hasSpecialChar = true;
-      break;  // หยุดลูปเมื่อเจอตัวอักษรพิเศษ
+      break; // หยุดลูปเมื่อเจอตัวอักษรพิเศษ
     }
   }
 
@@ -374,14 +374,14 @@ function run(excel, form) {
         ? {
             text: "“" + form.pj_name + "”",
             color: "#1565C0",
-            fontSize: 24,
+            fontSize: form.pj_name.length > 65 ? 22 : 24, // เพิ่มเงื่อนไขนี้
             absolutePosition: { x: 50, y: 250 + valueMargin },
-            font: hasSpecialChar ? "Arial" : undefined
+            font: hasSpecialChar ? "Arial" : undefined,
           }
         : {
             text: form.pj_name,
             color: "#1565C0",
-            fontSize: 28,
+            fontSize: form.pj_name.length > 52 ? 26 : 28, // เพิ่มเงื่อนไขนี้
             absolutePosition: { x: 50, y: 300 + valueMargin },
             bold: true,
           },
