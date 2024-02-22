@@ -77,6 +77,10 @@ const certification_pdf = async (excel, form) => {
       italics: "times.ttf",
       bolditalics: "times.ttf",
     },
+
+    Arial: {
+      normal: "arial.ttf",
+    },
   };
 
   //const result = await createPDF(docDefinition);
@@ -99,9 +103,9 @@ function signOption(form) {
               ? [
                   {
                     image: form.base64_sign_add_th,
-                    width: 250,
-                    height: 80,
-                    absolutePosition: { x: -215, y: 395 },
+                    width: 170,
+                    height: 70,
+                    absolutePosition: { x: -215, y: 420 },
                   },
                 ]
               : [],
@@ -110,9 +114,9 @@ function signOption(form) {
               // second column consists of paragraphs
               {
                 image: "sign_th",
-                width: 250,
-                height: 80,
-                absolutePosition: { x: 350, y: 395 },
+                width: 170,
+                height: 70,
+                absolutePosition: { x: 350, y: 420 },
               },
             ],
           ],
@@ -246,6 +250,19 @@ function run(excel, form) {
     valueX = 590;
   }
   signOption(form);
+
+  let hasSpecialChar = false;
+
+  for (let i = 0; i < form.pj_name.length; i++) {
+    const char = form.pj_name.charAt(i);
+
+    // เช็คว่า char เป็นตัวอักษรพิเศษหรือไม่
+    if (!(/^[A-Za-z0-9ก-๙\s]*$/.test(char))) {
+      hasSpecialChar = true;
+      break;  // หยุดลูปเมื่อเจอตัวอักษรพิเศษ
+    }
+  }
+
   excel.forEach((e, index) => {
     s.push(
       form.language === "TH"
@@ -329,19 +346,6 @@ function run(excel, form) {
             absolutePosition: { x: 50, y: 180 + valueMargin },
           },
 
-      // form.language === "Eng"
-      //   ? {
-      //       text: e.prefix + " " + e.name,
-      //       color: "#0D47A1",
-      //       fontSize: 34,
-      //       absolutePosition: { x: 50, y: 215 + valueMargin },
-      //       bold: true,
-      //     }
-      //   : {
-      //       text: e.prefix.trim() + e.name,
-      //       color: "#0D47A1",
-      //       fontSize: 28,
-      //     },
       form.language === "TH"
         ? {
             text: isEnglish(e.prefix.charAt(0))
@@ -372,6 +376,7 @@ function run(excel, form) {
             color: "#1565C0",
             fontSize: 24,
             absolutePosition: { x: 50, y: 250 + valueMargin },
+            font: hasSpecialChar ? "Arial" : undefined
           }
         : {
             text: form.pj_name,
