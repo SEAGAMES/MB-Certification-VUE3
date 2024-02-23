@@ -76,6 +76,10 @@ const certification_pdf = async (excel, form) => {
       italics: "times.ttf",
       bolditalics: "times.ttf",
     },
+
+    Arial: {
+      normal: "arial.ttf",
+    },
   };
 
   //const result = await createPDF(docDefinition);
@@ -85,26 +89,56 @@ const certification_pdf = async (excel, form) => {
 
 function signOption(form) {
   let data = "";
+  // TH
   if (form.language === "TH") {
+    // 2 ลายเซ็น
     if (form.two_sign) {
+      // ผอ. เซ็น
       if (form.sign) {
         // console.log('TH 2Sign Sign')
         data = {
           columns: [
+            form.base64_sign_add_th
+              ? [
+                  {
+                    image: form.base64_sign_add_th,
+                    width: 170,
+                    height: 70,
+                    absolutePosition: { x: -215, y: 420 },
+                  },
+                ]
+              : [],
+            // ลายเซ็นที่ 2 (ผอ.)
             [
               // second column consists of paragraphs
               {
                 image: "sign_th",
-                width: 250,
-                height: 80,
-                absolutePosition: { x: -200, y: 410 },
+                width: 170,
+                height: 70,
+                absolutePosition: { x: 350, y: 420 },
               },
             ],
           ],
         };
-      } else {
+      }
+      // ผอ. ไม่เซ็น
+      else {
         //TH 2 ลายเซ็น ผอ. ไม่เซ็น
-        // console.log('TH 2Sign NoSign')
+        // add เพิ่มเซ็น
+        if (form.base64_sign_add_th) {
+          data = {
+            columns: [
+              [
+                {
+                  image: form.base64_sign_add_th,
+                  width: 250,
+                  height: 80,
+                  absolutePosition: { x: -250, y: 395 },
+                },
+              ],
+            ],
+          };
+        }
       }
     } else {
       // 1 ลายเซ็น
@@ -130,11 +164,21 @@ function signOption(form) {
       if (form.sign) {
         // console.log('ENG 2Sign Sign')
         data = [
+          form.base64_sign_add_eng
+            ? {
+                image: form.base64_sign_add_eng,
+                width: 250,
+                height: 80,
+                //absolutePosition: { x: -200, y: 410 },
+                absolutePosition: { x: -250, y: 395 },
+              }
+            : {},
           {
             image: "sign_eng",
             width: 250,
             height: 80,
-            absolutePosition: { x: -200, y: 410 },
+            //absolutePosition: { x: -200, y: 410 },
+            absolutePosition: { x: 350, y: 400 },
           },
         ];
       } else {
@@ -184,6 +228,8 @@ function run(excel, form) {
   let valueX = 0;
   let valueMargin = 15;
 
+  // console.log(form.signListSelect)
+
   //console.log(form.pj_code, form.no);
 
   //let url = "http://10.62.38.51:3300/";
@@ -203,6 +249,19 @@ function run(excel, form) {
     valueX = 590;
   }
   signOption(form);
+
+  let hasSpecialChar = false;
+
+  for (let i = 0; i < form.pj_name.length; i++) {
+    const char = form.pj_name.charAt(i);
+
+    // เช็คว่า char เป็นตัวอักษรพิเศษหรือไม่
+    if (!/^[A-Za-z0-9ก-๙\s]*$/.test(char)) {
+      hasSpecialChar = true;
+      break; // หยุดลูปเมื่อเจอตัวอักษรพิเศษ
+    }
+  }
+
   excel.forEach((e, index) => {
     s.push(
       form.language === "TH"
@@ -286,19 +345,6 @@ function run(excel, form) {
             absolutePosition: { x: 50, y: 180 + valueMargin },
           },
 
-      // form.language === "Eng"
-      //   ? {
-      //       text: e.prefix + " " + e.name,
-      //       color: "#0D47A1",
-      //       fontSize: 34,
-      //       absolutePosition: { x: 50, y: 215 + valueMargin },
-      //       bold: true,
-      //     }
-      //   : {
-      //       text: e.prefix.trim() + e.name,
-      //       color: "#0D47A1",
-      //       fontSize: 28,
-      //     },
       form.language === "TH"
         ? {
             text: isEnglish(e.prefix.charAt(0))
@@ -315,10 +361,6 @@ function run(excel, form) {
             bold: true,
           },
 
-      // (form.language === "TH" && form.pj_code.substring(0, 3) === 'PAR') ? {
-      //   text: 'เข้าอบรมเชิงปฏิบัติการเรื่อง '
-      // } : (form.language === "TH" && form.pj_code.substring(0, 4) === 'ASST') ? { text: 'เป็นผู้ช่วยวิทยากรในการอบรมเชิงปฏิบัติการเรื่อง' } : {},
-
       form.language === "Eng"
         ? {
             text: form.participation_status,
@@ -327,34 +369,22 @@ function run(excel, form) {
           }
         : { text: form.participation_status, alignment: "center" },
 
-      // form.language === "Eng" && form.pj_code.substring(0, 3) === "PAR"
-      //   ? {
-      //       text: "participated in the practical training entitled",
-      //       absolutePosition: { x: 50, y: 265 + valueMargin },
-      //     }
-      //   : form.language === "Eng" && form.pj_code.substring(0, 4) === "ASST"
-      //   ? {
-      //       text: "is an assistant on practical training entitled",
-      //       absolutePosition: { x: 50, y: 265 + valueMargin },
-      //     }
-      //   : {},
-
       form.language === "TH"
         ? {
             text: "“" + form.pj_name + "”",
             color: "#1565C0",
-            fontSize: 24,
+            fontSize: form.pj_name.length > 65 ? 22 : 24, // เพิ่มเงื่อนไขนี้
             absolutePosition: { x: 50, y: 250 + valueMargin },
+            font: hasSpecialChar ? "Arial" : undefined,
           }
         : {
             text: form.pj_name,
             color: "#1565C0",
-            fontSize: 28,
+            fontSize: form.pj_name.length > 52 ? 26 : 28, // เพิ่มเงื่อนไขนี้
             absolutePosition: { x: 50, y: 300 + valueMargin },
             bold: true,
           },
 
-      // (form.language === "TH") ? { text: "“" + form.pj_name + "”", color: '#1565C0', fontSize: 24 } : {},
       { text: form.date },
 
       form.language === "TH"
@@ -384,53 +414,58 @@ function run(excel, form) {
       signOption(form),
 
       form.two_sign
-        ? {
+        ? // 2 ลายเซ็น
+          {
             columns: [
               [
-                form.language === "TH"
+                // คนที่เพิ่ม
+                // TH เเละ ENG
+                form.sign_add_id
                   ? {
-                      text: "ศาสตราจารย์ ดร. นายแพทย์นรัตถพล เจริญพันธุ์",
-                      fontSize: 11,
+                      text: `${form.add_name}`,
+                      fontSize: form.language === "TH" ? 11 : 13,
                       bolditalics: true,
                       absolutePosition: { x: -220, y: 495 },
                     }
-                  : {
-                      text: "Professor Narattaphol Charoenphandhu, M.D., Ph.D.",
-                      fontSize: 13,
-                      bolditalics: true,
-                      absolutePosition: { x: -220, y: 495 },
-                    },
-                form.language === "TH"
+                  : "",
+
+                // ตำแหน่ง TH เเละ ENG
+                form.sign_add_id
                   ? {
-                      text: "ผู้อำนวยการสถาบันชีววิทยาศาสตร์โมเลกุล",
-                      fontSize: 11,
+                      text: `${form.add_position}`,
+                      fontSize: form.language === "TH" ? 11 : 13,
                       bolditalics: true,
                       absolutePosition: { x: -220, y: 520 },
                     }
-                  : {
-                      text: "Director",
-                      fontSize: 13,
-                      bolditalics: true,
-                      absolutePosition: { x: -220, y: 520 },
-                    },
+                  : "",
               ],
+
+              // ผอ. ชื่อ
               [
                 {
-                  text: `${form.add_name}`,
-                  fontSize: 11,
+                  text:
+                    form.language === "TH"
+                      ? "ศาสตราจารย์ ดร. นายแพทย์นรัตถพล เจริญพันธุ์"
+                      : "Professor Narattaphol Charoenphandhu, M.D., Ph.D.",
+                  fontSize: form.language === "TH" ? 11 : 13,
                   bolditalics: true,
                   absolutePosition: { x: 330, y: 495 },
                 },
+                // ผอ. ตำแหน่ง
                 {
-                  text: `${form.add_position}`,
-                  fontSize: 11,
+                  text:
+                    form.language === "TH"
+                      ? "ผู้อำนวยการสถาบันชีววิทยาศาสตร์โมเลกุล"
+                      : "Director",
+                  fontSize: form.language === "TH" ? 11 : 13,
                   bolditalics: true,
                   absolutePosition: { x: 335, y: 520 },
                 },
               ],
             ],
           }
-        : {
+        : // 1 ลายเซ็น
+          {
             columns: [
               [
                 form.language === "TH"

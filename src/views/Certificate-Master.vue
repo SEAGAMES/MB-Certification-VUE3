@@ -33,11 +33,11 @@
                 <v-icon @click="printPDF(item)" style="color: rgb(55, 136, 176)"
                   >mdi-printer</v-icon
                 >
-                <v-icon
+                <!-- <v-icon
                   @click="editCertificate(item)"
                   style="color: rgb(243, 156, 18)"
                   >mdi-pencil</v-icon
-                >
+                > -->
                 <v-icon
                   @click="deleteCertificate(item.pj_code)"
                   style="color: rgb(255, 0, 0)"
@@ -93,6 +93,7 @@ export default {
       dataDetail: [],
       base_64: null,
       preview: false,
+      dataSign: [],
       headers: [
         {
           align: "center",
@@ -135,6 +136,7 @@ export default {
     },
 
     async createPDFShow() {
+      // console.log(this.dataStorage);
       const pdfDocGenerator = await createPDF.certification_pdf(
         this.dataDetail.data,
         this.dataStorage
@@ -184,9 +186,33 @@ export default {
       //console.log(data)
       this.dataLoad = data.data;
       // console.log(this.dataLoad.data);
+
+      this.dataSign = await apiCertificate.dataSign();
+
+      this.dataLoad.data.forEach((obj) => {
+        if (obj.language === "TH") {
+          // console.log(obj)
+          this.dataSign.forEach((obj_sign) => {
+            if (obj_sign.id === obj.sign_add_id) {
+              obj.add_name = obj_sign.name_th;
+              obj.add_position = obj_sign.position_th;
+              obj.base64_sign_add_th = obj_sign.base64_sign_th;
+            }
+          });
+        } else {
+          this.dataSign.forEach((obj_sign) => {
+            if (obj_sign.id === obj.sign_add_id) {
+              obj.add_name = obj_sign.name_eng;
+              obj.add_position = obj_sign.position_eng;
+              obj.base64_sign_add_eng = obj_sign.base64_sign_eng;
+            }
+          });
+        }
+      });
     },
 
     editCertificate(data) {
+      
       // แปลง 0 กับ 1 เป็น true กับ false
       data.sign = data.sign === 1;
       data.two_sign = data.two_sign === 1;

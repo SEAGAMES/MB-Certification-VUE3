@@ -1,133 +1,150 @@
 <template >
   <v-row justify="center" class="fontSarabun">
-    <v-col cols="12" sm="10" md="8" lg="6">
-      <v-form ref="form" lazy-validation>
-        <v-card ref="form" :height="335">
-          <v-card-text>
-            <v-row
-              ><v-col cols="12" md="6"
-                ><v-text-field
-                  label="ชื่อโครงการ"
-                  v-model="form.pj_name"
-                  @change="saveCreatePDF"
-                  :rules="textRule"
-                  required
-                ></v-text-field></v-col
-              ><v-col
-                ><v-row
-                  ><v-col cols="4">
-                    <v-switch
-                      v-model="form.language"
-                      @change="saveCreatePDF"
-                      hide-details
-                      true-value="Eng"
-                      false-value="TH"
-                      color="indigo"
-                      :label="`ฟอร์ม : ${form.language}`"
-                    ></v-switch> </v-col
-                  ><v-col
-                    ><v-checkbox
-                      label="ใส่ลายเซ็น ผอ."
-                      v-model="form.sign"
-                      @change="saveCreatePDF"
-                      color="indigo"
-                      hide-details
-                    ></v-checkbox></v-col
-                  ><v-col
-                    ><v-checkbox
-                      label="2 ลายเซ็น"
-                      v-model="form.two_sign"
-                      @change="saveCreatePDF"
-                      color="indigo-darken-3"
-                      hide-details
-                    ></v-checkbox></v-col></v-row></v-col
-            ></v-row>
-            <v-row class="mt-n8">
-              <v-col cols="12" md="6"
-                ><v-text-field
-                  label="รหัสโครงการ"
-                  id="pj_name"
-                  v-model="form.pj_code"
-                  @change="saveCreatePDF"
-                  :rules="pjCodeRule"
-                  @input="handleInput"
-                  required
-                ></v-text-field
-              ></v-col>
-              <v-col cols="12" md="6"
-                ><v-text-field
-                  label="ชื่อ"
-                  v-model="form.add_name"
-                  @change="saveCreatePDF"
-                  :rules="twoSignRule"
-                  :disabled="!form.two_sign"
-                ></v-text-field
-              ></v-col>
-            </v-row>
-            <v-row class="mt-n8"
-              ><v-col cols="6"
-                ><v-text-field
-                  label="รูปแบบการเข้าร่วม"
-                  v-model="form.participation_status"
-                  @change="saveCreatePDF"
-                  :rules="textRule"
-                  required
-                ></v-text-field></v-col
-              ><v-col cols="6"
-                ><v-text-field
-                  label="ตำแหน่ง"
-                  v-model="form.add_position"
-                  @change="saveCreatePDF"
-                  :rules="twoSignRule"
-                  :disabled="!form.two_sign"
-                ></v-text-field></v-col
-            ></v-row>
-            <v-row class="mt-n8"
-              ><v-col cols="6"
-                ><v-text-field
-                  label="วันที่"
-                  v-model="form.date_desc"
-                  @change="saveCreatePDF"
-                  :rules="textRule"
-                  required
-                ></v-text-field></v-col
-            ></v-row>
-            <v-row>
-              <input
-                class="mt-n5 ml-3"
-                type="file"
-                @change.left="add_file()"
+    <v-form class="mx-auto" ref="form" lazy-validation align="center" rounded>
+      <v-card ref="form" :height="345" :width="770">
+        <v-card-text>
+          <v-row
+            ><v-col cols="12" md="6"
+              ><v-text-field
+                label="ชื่อโครงการ"
+                v-model="form.pj_name"
                 @change="saveCreatePDF"
-                @click="this.$refs.myFiles.value = null"
-                ref="myFiles"
-                accept=".xls, .xlsx, .csv"
-              />
-              <v-spacer></v-spacer>
-              <v-btn
-                v-if="save_to_db"
+                :rules="textRule"
+                required
+              ></v-text-field></v-col
+            ><v-col
+              ><v-row
+                ><v-col cols="4">
+                  <v-switch
+                    v-model="form.language"
+                    @change="saveCreatePDF"
+                    hide-details
+                    true-value="Eng"
+                    false-value="TH"
+                    color="indigo"
+                    :label="`ฟอร์ม : ${form.language}`"
+                  ></v-switch> </v-col
+                ><v-col
+                  ><v-checkbox
+                    label="ผอ. เซ็น"
+                    v-model="form.sign"
+                    @change="saveCreatePDF"
+                    color="indigo"
+                    hide-details
+                  ></v-checkbox></v-col
+                ><v-col
+                  ><v-checkbox
+                    label="2 ลายเซ็น"
+                    v-model="form.two_sign"
+                    @change="saveCreatePDF"
+                    color="indigo-darken-3"
+                    hide-details
+                  ></v-checkbox></v-col></v-row></v-col
+          ></v-row>
+          <v-row class="mt-n8">
+            <v-col cols="12" md="6"
+              ><v-text-field
+                label="รหัสโครงการ"
+                id="pj_name"
+                v-model="form.pj_code"
                 @change="saveCreatePDF"
-                @click="createCertificate"
-                class="mt-n7 mx-2"
-                size="small"
-                color="orange"
-                icon="mdi-refresh"
-              ></v-btn>
-              <!-- @click="showDialog = true" -->
-              <v-btn
-                v-if="save_to_db"
+                :rules="pjCodeRule"
+                @input="handleInput"
+                required
+              ></v-text-field
+            ></v-col>
+            <v-col cols="6" md="1">
+              <v-checkbox
+                v-model="form.selectSign"
                 @change="saveCreatePDF"
-                @click="validateCheck"
-                class="mt-n7 mx-2"
-                size="small"
                 color="indigo"
-                icon="mdi-cloud-upload"
-              ></v-btn>
-            </v-row>
-          </v-card-text>
-          <v-divider class="mt-12"></v-divider>
-        </v-card>
-      </v-form>
-    </v-col>
+                hide-details
+                :disabled="!form.two_sign"
+              ></v-checkbox>
+            </v-col>
+            <v-col cols="12" md="5">
+              <v-select
+                v-model="form.sign_add_id"
+                label="เลือกลายเซ็นที่ 2"
+                :items="dataSign"
+                item-value="id"
+                :item-title="form.language === 'TH' ? 'name_th' : 'name_eng'"
+                :rules="selectSignRule"
+                :disabled="!form.selectSign"
+              />
+            </v-col>
+          </v-row>
+          <v-row class="mt-n8"
+            ><v-col cols="6"
+              ><v-text-field
+                label="รูปแบบการเข้าร่วม"
+                v-model="form.participation_status"
+                @change="saveCreatePDF"
+                :rules="textRule"
+                required
+              ></v-text-field></v-col
+            ><v-col cols="6"
+              ><v-text-field
+                label="ชื่อ"
+                v-model="form.add_name"
+                @change="saveCreatePDF"
+                :rules="twoSignRule"
+                :disabled="!form.two_sign"
+              ></v-text-field></v-col
+          ></v-row>
+          <v-row class="mt-n8"
+            ><v-col
+              ><v-text-field
+                label="วันที่"
+                v-model="form.date_desc"
+                @change="saveCreatePDF"
+                :rules="textRule"
+                required
+              ></v-text-field></v-col
+            ><v-col
+              ><v-text-field
+                label="ตำแหน่ง"
+                v-model="form.add_position"
+                @change="saveCreatePDF"
+                :rules="twoSignRule"
+                :disabled="!form.two_sign"
+              ></v-text-field></v-col
+          ></v-row>
+          <v-row>
+            <input
+              class="mt-n5 ml-3"
+              type="file"
+              @change.left="add_file()"
+              @change="saveCreatePDF"
+              @click="this.$refs.myFiles.value = null"
+              ref="myFiles"
+              accept=".xls, .xlsx, .csv"
+            />
+            <v-spacer></v-spacer>
+            <v-btn
+              v-if="save_to_db"
+              @change="saveCreatePDF"
+              @click="create_CertificatePDF"
+              class="mt-n7 mx-2"
+              size="small"
+              color="orange"
+              icon="mdi-refresh"
+            ></v-btn>
+            <!-- @click="showDialog = true" -->
+            <v-btn
+              v-if="save_to_db"
+              @change="saveCreatePDF"
+              @click="validateCheck"
+              class="mt-n7 mx-2"
+              size="small"
+              color="indigo"
+              icon="mdi-cloud-upload"
+            ></v-btn>
+          </v-row>
+        </v-card-text>
+        <v-divider class="mt-12"></v-divider>
+      </v-card>
+    </v-form>
 
     <!-- 
     dialog confirm save data to db -->
@@ -157,7 +174,12 @@
   <v-row justify="center">
     <div>
       <!-- ใช้ <iframe> เพื่อแสดงไฟล์ PDF -->
-      <iframe :src="urlWithPreferences" ref="pdfIframe" v-if="preview"></iframe>
+      <iframe
+        :src="urlWithPreferences"
+        class="mt-3"
+        ref="pdfIframe"
+        v-if="preview"
+      ></iframe>
     </div>
   </v-row>
 </template>
@@ -182,6 +204,10 @@ export default {
         (v) => (this.form.two_sign ? !!v || "กรุณาใส่ข้อความ" : true),
       ],
 
+      selectSignRule: [
+        (v) => (this.form.selectSign ? !!v || "กรุณาเลือก" : true),
+      ],
+
       form: {
         pj_name: "",
         pj_code: "",
@@ -190,10 +216,16 @@ export default {
         currentYear: "",
         add_name: "",
         add_position: "",
+        base64_sign_add_th: "",
+        base64_sign_add_eng: "",
         language: "TH",
         sign: false,
         two_sign: false,
+        selectSign: false,
+        sign_add_id: null,
       },
+
+      newForm: {},
 
       file: {
         name: "",
@@ -203,6 +235,8 @@ export default {
         lastModifiedDate: "",
         webkitRelativePath: "",
       },
+
+      dataSign: [],
 
       base_64: null,
       excel_array: null,
@@ -214,8 +248,10 @@ export default {
   },
 
   async mounted() {
+    this.dataSign = await apiCertificate.dataSign();
     const dataFormLocal = JSON.parse(localStorage.getItem("create_pdf")) || {};
     this.form = { ...this.form, ...dataFormLocal }; //กำหนดค่าทุก property ของ dataFormLocal ลงใน this.form.
+
   },
   methods: {
     //บันทักข้อมูลสำเร็จ ต้องการไปยังหน้า Detail เพื่อ Print หรือไม่
@@ -290,7 +326,7 @@ export default {
       this.excel_array = result;
     },
 
-    async createCertificate() {
+    async create_CertificatePDF() {
       const currentDate = new Date();
       this.form.currentYear = currentDate.getFullYear();
 
@@ -340,8 +376,16 @@ export default {
         // console.log(this.form);
         // กรณีไม่ซ้ำ
         if (result.data.msg === "ok") {
+
+          // เอาค่า base64_sign_add_th, base64_sign_eng ออกก่อนส่ง เพื่อลดขนาดข้อมูล
+          this.newForm = {
+            ...this.form,
+            base64_sign_add_th: undefined,
+            base64_sign_add_eng: undefined,
+          };
+
           const resultInsert = await apiCertificate.createCertificate(
-            this.form,
+            this.newForm,
             this.excel_array
           );
           // กรณี insert master เเละ detail สำเร็จ
@@ -388,16 +432,88 @@ export default {
 
   watch: {
     excel_array() {
-      this.createCertificate();
+      this.create_CertificatePDF();
     },
+
+    "form.language": {
+      handler() {
+        const objectWithId = this.dataSign.find(
+          (obj) => obj.id === this.form.sign_add_id
+        );
+        if (
+          this.form.selectSign === true &&
+          this.form.sign_add_id >= 1 
+        ) {
+          this.form.add_name =
+            this.form.language === "TH"
+              ? objectWithId.name_th
+              : objectWithId.name_eng;
+          this.form.add_position =
+            this.form.language === "TH"
+              ? objectWithId.position_th
+              : objectWithId.position_eng;
+          this.form.base64_sign_add_th = objectWithId.base64_sign_th;
+          this.form.base64_sign_add_eng = objectWithId.base64_sign_eng;
+          this.saveCreatePDF();
+        }
+      },
+      immediate: true, // ให้ทำงานทันทีเมื่อ component ถูก mount
+    },
+
+    // 2 sign check
     "form.two_sign": {
       handler(newValue) {
         if (!newValue) {
           this.form.add_name = null;
           this.form.add_position = null;
+          this.form.sign_add_id = null;
+          this.form.selectSign = false;
+          this.form.base64_sign_add_th = null;
+          this.form.base64_sign_add_eng = null;
         }
       },
       immediate: true, // เพื่อให้ทำการเช็คค่าเมื่อ component ถูก mount
+    },
+
+    // v-check
+    "form.selectSign": {
+      handler(newValue) {
+        if (!newValue) {
+          this.form.add_name = null;
+          this.form.add_position = null;
+          this.form.sign_add_id = null;
+          this.form.base64_sign_add_th = null;
+          this.base64_sign_add_eng = null;
+        }
+      },
+      immediate: true, // เพื่อให้ทำการเช็คค่าเมื่อ component ถูก mount
+    },
+
+    // v-select
+    "form.sign_add_id": {
+      handler(newValue) {
+        // ตรวจสอบว่า form.sign_add_id มีค่าหรือไม่
+        if (newValue) {
+          const objectWithId = this.dataSign.find(
+            (obj) => obj.id === this.form.sign_add_id
+          );
+
+          if (objectWithId) {
+            this.form.add_name =
+              this.form.language === "TH"
+                ? objectWithId.name_th
+                : objectWithId.name_eng;
+            this.form.add_position =
+              this.form.language === "TH"
+                ? objectWithId.position_th
+                : objectWithId.position_eng;
+            this.form.base64_sign_add_th = objectWithId.base64_sign_th; // เอาใน db มาใส่ในตัวแปรใหม่
+            this.form.base64_sign_add_eng = objectWithId.base64_sign_eng;
+            this.saveCreatePDF();
+          }
+        }
+      },
+      immediate: true, // ให้ทำงานทันทีเมื่อ component ถูก mount
     },
   },
 };

@@ -11,6 +11,21 @@ const dataInPjcode = async(pj_code) => {
     return data
 }
 
+const getDataFilter = async(pj_code) => {
+    const data = await axios.get(`${apiUrl}data_filter/${pj_code}`)
+    return data
+}
+
+const duplicateCheck = async(pj_code) => {
+    const data = await axios.get(`${apiUrl}data_duplicate/${pj_code}`)
+    return data
+}
+
+const dataSign = async() => {
+    const data = await axios.get(`${apiUrl}data_sign`)
+    return data.data.data
+}
+
 const createCertificate = async(data, excel) => {
     const newData = []
     newData.push(data, excel)
@@ -38,16 +53,6 @@ const getDataCertificate_detail = async(datalist) => {
     return data
 }
 
-const getDataFilter = async(pj_code) => {
-    const data = await axios.get(`${apiUrl}data_filter/${pj_code}`)
-    return data
-}
-
-const duplicateCheck = async(pj_code) => {
-    const data = await axios.get(`${apiUrl}data_duplicate/${pj_code}`)
-    return data
-}
-
 const editName = async(data) => {
     const result = await axios.post(`${apiUrl}updateName`, data)
     return result
@@ -67,6 +72,7 @@ export default {
     getDataFilter,
     duplicateCheck,
     editName,
+    dataSign,
     deleteCertificate,
     getDataCertificate_detail
 }

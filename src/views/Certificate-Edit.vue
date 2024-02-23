@@ -40,28 +40,62 @@
                       ></v-checkbox></v-col></v-row></v-col
               ></v-row>
               <v-row class="mt-n8">
-                <v-col
+                <v-col cols="12" md="6"
                   ><v-text-field
                     label="รหัสโครงการ"
                     id="pj_name"
                     v-model="dataStorage.pj_code"
                     :rules="textRule"
                     @input="handleInput"
+                    required
                   ></v-text-field
                 ></v-col>
-                <v-col
+                <v-col cols="6" md="1">
+                  <v-checkbox
+                    color="indigo"
+                    hide-details
+                    :rules="twoSignRule"
+                  ></v-checkbox>
+                </v-col>
+                <!-- <v-col>
+                  <v-select
+                    label="เลือกลายเซ็นที่ 2"
+                    :items="dataSign"
+                    item-value="id"
+                    :item-title="name_th"
+                  ></v-select>
+                </v-col> -->
+                <!-- <v-col
                   ><v-text-field
                     label="ชื่อ"
                     v-model="dataStorage.add_name"
                     :rules="twoSignRule"
                     :disabled="!dataStorage.two_sign"
                   ></v-text-field
-                ></v-col> </v-row
+                ></v-col>  --> </v-row
               ><v-row class="mt-n8"
                 ><v-col cols="6"
                   ><v-text-field
                     label="รูปแบบการเข้าร่วม"
                     v-model="dataStorage.participation_status"
+                    :rules="textRule"
+                    required
+                  ></v-text-field
+                ></v-col>
+                <v-col cols="6"
+                  ><v-text-field
+                    label="ชื่อ"
+                    v-model="dataStorage.add_name"
+                    :rules="twoSignRule"
+                    :disabled="!dataStorage.two_sign"
+                  ></v-text-field
+                ></v-col>
+              </v-row>
+              <v-row class="mt-n8"
+                ><v-col cols="6"
+                  ><v-text-field
+                    label="วันที่"
+                    v-model="dataStorage.date_desc"
                     :rules="textRule"
                     required
                   ></v-text-field></v-col
@@ -71,17 +105,9 @@
                     v-model="dataStorage.add_position"
                     :rules="twoSignRule"
                     :disabled="!dataStorage.two_sign"
-                  ></v-text-field></v-col
-              ></v-row>
-              <v-row class="mt-n8"
-                ><v-col cols="6"
-                  ><v-text-field
-                    label="วันที่"
-                    v-model="dataStorage.date_desc"
-                    :rules="textRule"
-                    required
-                  ></v-text-field></v-col
-              ></v-row>
+                  ></v-text-field
+                ></v-col>
+              </v-row>
               <v-row>
                 <!-- เพิ่มรายชื่อ -->
                 <v-spacer></v-spacer>
@@ -203,6 +229,7 @@ export default {
 
       selectPopupShow: null,
       dataStorage: [],
+      dataSign: [],
       indexEdit: null,
       mangeName: {
         dialog: false,
@@ -215,14 +242,18 @@ export default {
       ],
     };
   },
-  mounted() {
+  async mounted() {
+    this.dataSign = await apiCertificate.dataSign();
+
     // ดึงข้อมูลจาก Local Storage
     const certificate_data = localStorage.getItem("certificate_data");
 
     // แปลงข้อมูลที่ดึงมาให้กลายเป็น Object
     this.dataStorage = JSON.parse(certificate_data);
+
     this.mangeName.pj_code = this.dataStorage.pj_code;
     this.getDataCertificateDetail();
+
   },
   methods: {
     handleInput() {
@@ -298,7 +329,6 @@ export default {
       pdfDocGenerator.getDataUrl((dataUrl) => {
         this.base_64 = dataUrl;
         const iframe = this.$refs.pdfIframe;
-        console.log(this.$refs);
         iframe.src = dataUrl;
 
         // กำหนดความกว้างและความสูงของ iframe ตรงนี้
@@ -313,7 +343,8 @@ export default {
         this.dataStorage
       );
       this.dataDetail = data.data;
-    },
+
+   },
 
     showAlert(icon, title) {
       Swal.fire({
