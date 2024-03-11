@@ -256,10 +256,11 @@ function run(excel, form) {
     const char = form.pj_name.charAt(i);
 
     // เช็คว่า char เป็นตัวอักษรพิเศษหรือไม่
-    if (!/^[A-Za-z0-9ก-๙\s]*$/.test(char)) {
+    // if (!/^[A-Za-z0-9ก-๙\s]*$/.test(char)) {
+    if (char === "α" || char === "β") {
       hasSpecialChar = true;
       break; // หยุดลูปเมื่อเจอตัวอักษรพิเศษ
-    }
+    } 
   }
 
   excel.forEach((e, index) => {
